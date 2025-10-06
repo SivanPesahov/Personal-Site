@@ -2,10 +2,11 @@
 .venv/
 __pycache__/
 *.pyc
+.env
 
 # IDE
 .vscode/
 .idea/
 
 # OS files
-.DS_Store
+.DS_Store.env
