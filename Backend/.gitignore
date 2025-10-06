@@ -9,4 +9,4 @@ __pycache__/
 .idea/
 
 # OS files
-.DS_Store.env
+.DS_Store
