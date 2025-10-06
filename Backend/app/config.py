@@ -1,5 +1,10 @@
 # path: Backend/app/config.py
 import os
+from dotenv import load_dotenv
+
+# Load .env from the project root (Backend/.env)
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+load_dotenv(dotenv_path=os.path.join(BASE_DIR, ".env"))
 
 
 class Config:
@@ -21,3 +26,16 @@ class Config:
     # חיבור ל-MySQL (נשתמש בהמשך עם SQLAlchemy)
     # פורמט: mysql+pymysql://USER:PASSWORD@HOST:3306/DBNAME?charset=utf8mb4
     DATABASE_URL = os.getenv("DATABASE_URL", "")
+
+    # SQLAlchemy configuration
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "")
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ECHO = os.getenv("SQLALCHEMY_ECHO", "0") == "1"
+
+
+class DevConfig(Config):
+    DEBUG = True
+
+
+class ProdConfig(Config):
+    DEBUG = False
