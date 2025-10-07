@@ -1,4 +1,3 @@
-# app/models/models.py
 from sqlalchemy import func
 from ..extensions import db
 
