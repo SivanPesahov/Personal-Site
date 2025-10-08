@@ -1,4 +1,3 @@
-# path: Backend/app/config.py
 import os
 from dotenv import load_dotenv
 
@@ -20,8 +19,10 @@ class Config:
         o.strip() for o in os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
     ]
 
-    # Rate limit ברירת מחדל (נשתמש מאוחר יותר)
-    RATELIMIT_DEFAULT = os.getenv("RATELIMIT_DEFAULT", "100/hour")
+    # Rate limit ברירת מחדל (נשתמש כבר עכשיו)
+    RATELIMIT_DEFAULT = os.getenv("RATELIMIT_DEFAULT", "100 per hour")
+    # אחסון מגבלות (לזיכרון מקומי; נשתמש ב־Redis בפרודקשן)
+    RATELIMIT_STORAGE_URI = os.getenv("RATELIMIT_STORAGE_URI", "memory://")
 
     # חיבור ל-MySQL (נשתמש בהמשך עם SQLAlchemy)
     # פורמט: mysql+pymysql://USER:PASSWORD@HOST:3306/DBNAME?charset=utf8mb4
