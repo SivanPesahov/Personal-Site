@@ -59,3 +59,10 @@ class ContactMessage(db.Model):
 
     def __repr__(self) -> str:
         return f"<ContactMessage {self.id}>"
+
+
+__all__ = [
+    "Project",
+    "Comment",
+    "ContactMessage",
+]

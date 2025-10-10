@@ -33,6 +33,23 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = os.getenv("SQLALCHEMY_ECHO", "0") == "1"
 
+    # SMTP / Flask-Mail
+    MAIL_SERVER = os.getenv("MAIL_SERVER", "localhost")
+    MAIL_PORT = int(os.getenv("MAIL_PORT", "25"))
+    MAIL_USE_TLS = os.getenv("MAIL_USE_TLS", "false").lower() == "true"
+    MAIL_USE_SSL = os.getenv("MAIL_USE_SSL", "false").lower() == "true"
+    MAIL_USERNAME = os.getenv("MAIL_USERNAME")
+    MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
+    MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER")
+    MAIL_TO = os.getenv("MAIL_TO")
+    MAIL_SUBJECT_PREFIX = os.getenv("MAIL_SUBJECT_PREFIX", "[Personal Site]")
+
+    # CAPTCHA
+    CAPTCHA_PROVIDER = os.getenv("CAPTCHA_PROVIDER", "turnstile").lower()
+    TURNSTILE_SECRET = os.getenv("TURNSTILE_SECRET")
+    HCAPTCHA_SECRET = os.getenv("HCAPTCHA_SECRET")
+    CAPTCHA_BYPASS = os.getenv("CAPTCHA_BYPASS", "false").lower() == "true"
+
 
 class DevConfig(Config):
     DEBUG = True
