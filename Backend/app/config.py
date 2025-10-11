@@ -16,8 +16,15 @@ class Config:
 
     # דומיינים מותרים ל-CORS (נשתמש מאוחר יותר)
     CORS_ORIGINS = [
-        o.strip() for o in os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
+        o.strip()
+        for o in os.getenv(
+            "CORS_ORIGINS", "http://localhost:3000,https://www.sivan.dev"
+        ).split(",")
     ]
+    CORS_SUPPORTS_CREDENTIALS = True
+    CORS_ALLOW_HEADERS = ["Content-Type", "Authorization", "X-Requested-With"]
+    CORS_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    CORS_MAX_AGE = 86400
 
     # Rate limit ברירת מחדל (נשתמש כבר עכשיו)
     RATELIMIT_DEFAULT = os.getenv("RATELIMIT_DEFAULT", "100 per hour")
