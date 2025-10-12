@@ -1,121 +1,127 @@
-import {
-  useEffect,
-  useRef,
-  useReducer,
-  useMemo,
-  useCallback,
-  useId,
-  useInsertionEffect,
-  useState,
-} from "react";
-import { useSearchParams } from "react-router-dom";
-import api from "../services/api.service";
-import type { User } from "../types/userType";
-
-type ActionType = "increment" | "decrement" | "double";
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { listProjects, type Project } from "../services/projects.service";
 
 function HomePage() {
-  const [users, setUsers] = useState<User[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [total, setTotal] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  const searchTerm = searchParams.get("search") || "";
-
-  const ids = {
-    increment: useId(),
-    decrement: useId(),
-    double: useId(),
-  };
-
-  // useRef - persists a value across renders without causing re-renders
-  const renderCount = useRef(0);
-
-  // useReducer - manages complex state logic through actions
-  const [count, dispatch] = useReducer((state: number, action: ActionType) => {
-    switch (action) {
-      case "increment":
-        return state + 1;
-      case "decrement":
-        return state - 1;
-      case "double":
-        return state * 2;
-      default:
-        return state;
-    }
-  }, 0);
-
-  // useMemo - memoizes an expensive computation to avoid recalculating on every render
-  const sortedUsers = useMemo(() => {
-    const filtered = users.filter((user) =>
-      user.username.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    return filtered.sort((a, b) => a.username.localeCompare(b.username));
-  }, [users, searchTerm]);
-
-  // useCallback - memoizes a function so it's not recreated on every render
-  const handleClick = useCallback(() => {
-    console.log("Clicked!");
-  }, []);
-
-  // useInsertionEffect - runs before DOM mutations, used mainly for styling libraries (React 18+)
-  useInsertionEffect(() => {
-    // Example: Add class for a CSS-in-JS library
-  }, []);
+  const q = searchParams.get("q") || "";
 
   useEffect(() => {
-    async function getAllUsers() {
+    let cancelled = false;
+    async function run() {
+      setLoading(true);
+      setError(null);
       try {
-        const { data } = await api.get("/Auth/getAllUsers");
-        setUsers(data);
-      } catch (error: any) {
-        console.log(error);
+        const res = await listProjects({ q, page: 1, page_size: 12 });
+        if (!cancelled) {
+          setProjects(res.items);
+          setTotal(res.total);
+        }
+      } catch (e: any) {
+        if (!cancelled) setError(e?.message || "Failed to load projects");
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     }
-    getAllUsers();
-  }, []);
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [q]);
 
-  // debugging tool - used with vs code debugger or chrome devtools
-  // debugger;
+  const onSearchChange = (value: string) => {
+    if (value) setSearchParams({ q: value });
+    else setSearchParams({});
+  };
 
   return (
-    <>
-      <h1>Users</h1>
-      <ul>
-        {sortedUsers.map((user: User, index: number) => (
-          <li key={index}>
-            {user.username} - {user.email}
-          </li>
-        ))}
-      </ul>
-
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={(e) => {
-          const value = e.target.value;
-          if (value) {
-            setSearchParams({ search: value });
-          } else {
-            setSearchParams({});
-          }
+    <div style={{ maxWidth: 920, margin: "0 auto", padding: 16 }}>
+      <header
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 12,
         }}
-        placeholder="Search for user..."
-      />
+      >
+        <h1 style={{ margin: 0 }}>Projects</h1>
+        <input
+          type="text"
+          value={q}
+          onChange={(e) => onSearchChange(e.target.value)}
+          placeholder="Search projects…"
+          aria-label="Search projects"
+          style={{ padding: 8, minWidth: 240 }}
+        />
+      </header>
 
-      <h2>Count: {count}</h2>
-      <ul>
-        {["increment", "decrement", "double"].map((action) => (
-          <button
-            key={ids[action as keyof typeof ids]}
-            onClick={() => dispatch(action as ActionType)}
+      {loading && <p style={{ marginTop: 16 }}>Loading…</p>}
+      {error && <p style={{ marginTop: 16, color: "red" }}>Error: {error}</p>}
+
+      {!loading && !error && (
+        <>
+          <p style={{ marginTop: 8, color: "#666" }}>
+            {total} result{total === 1 ? "" : "s"}
+          </p>
+          <ul
+            style={{
+              listStyle: "none",
+              padding: 0,
+              marginTop: 16,
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+              gap: 16,
+            }}
           >
-            {action}
-          </button>
-        ))}
-      </ul>
-
-      <h2>Render Count: {renderCount.current++}</h2>
-
-      <button onClick={handleClick}>Click me (useCallback)</button>
-    </>
+            {projects.map((p) => (
+              <li
+                key={p.id}
+                style={{
+                  border: "1px solid #eee",
+                  borderRadius: 8,
+                  padding: 16,
+                }}
+              >
+                <h3 style={{ marginTop: 0, marginBottom: 8 }}>
+                  <Link to={`/projects/${encodeURIComponent(p.slug)}`}>
+                    {p.title}
+                  </Link>
+                </h3>
+                <p style={{ margin: 0, color: "#555" }}>
+                  {p.short_description}
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 12,
+                    marginTop: 12,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <Link to={`/projects/${encodeURIComponent(p.slug)}`}>
+                    View details
+                  </Link>
+                  {p.live_url && (
+                    <a href={p.live_url} target="_blank" rel="noreferrer">
+                      Live
+                    </a>
+                  )}
+                  {p.repo_url && (
+                    <a href={p.repo_url} target="_blank" rel="noreferrer">
+                      Repo
+                    </a>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+    </div>
   );
 }
 

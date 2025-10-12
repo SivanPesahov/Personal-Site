@@ -1,40 +1,56 @@
 import axios from "axios";
+import { API_BASE } from "../config";
 
+// Axios instance configured to talk directly to the Flask API
+// Backend responses are standardized as: { data, error }
 const api = axios.create({
-  baseURL:
-    process.env.NODE_ENV === "production"
-      ? "/api"
-      : "http://localhost:3000/api",
+  baseURL: API_BASE,
+  headers: { "Content-Type": "application/json" },
+  withCredentials: false,
 });
 
-api.interceptors.request.use(
-  (config) => {
-    let token = localStorage.getItem("token");
-    if (token) {
-      token = token?.slice(1, -1);
-      config.headers.Authorization = `Bearer ${token}`;
+// Response interceptor: unwraps { data, error } and throws on error
+api.interceptors.response.use(
+  (response) => {
+    const payload = response?.data;
+    if (payload && typeof payload === "object" && "error" in payload) {
+      if (payload.error) {
+        return Promise.reject(new Error(String(payload.error)));
+      }
+      return payload.data;
     }
-    return config;
+    // Fallback: return raw data if payload isn't in the standard shape
+    return response.data;
   },
   (error) => {
-    return Promise.reject(error);
-  }
-);
-
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
     if (error.response) {
-      // Server responded with a status other than 2xx
-      console.error("Error response:", error.response);
+      console.error(
+        "API Error Response:",
+        error.response.status,
+        error.response.data
+      );
+      const serverPayload = error.response.data;
+      if (
+        serverPayload &&
+        typeof serverPayload === "object" &&
+        "error" in serverPayload
+      ) {
+        return Promise.reject(
+          new Error(
+            String(serverPayload.error || `HTTP ${error.response.status}`)
+          )
+        );
+      }
+      return Promise.reject(new Error(`HTTP ${error.response.status}`));
     } else if (error.request) {
-      // No response was received
-      console.error("Error request:", error.request);
+      console.error("API No Response (network/connectivity)", error.request);
+      return Promise.reject(
+        new Error("No response from server. Check connectivity / CORS.")
+      );
     } else {
-      // Something else triggered the error
-      console.error("Error message:", error.message);
+      console.error("API Error Message:", error.message);
+      return Promise.reject(new Error(error.message || "Unknown client error"));
     }
-    return Promise.reject(error);
   }
 );
 

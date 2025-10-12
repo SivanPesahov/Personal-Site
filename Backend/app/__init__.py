@@ -43,13 +43,20 @@ def create_app(config_object=Config):
     limiter.init_app(app)
     mail.init_app(app)
     # --- CORS init ---
+    # In development (debug), allow all origins to avoid local CORS friction.
+    # In production, respect the configured allowlist.
+    origins = app.config["CORS_ORIGINS"]
+    is_debug = bool(app.config.get("DEBUG"))
+    use_wildcard = is_debug and origins != "*"
+
     cors.init_app(
         app,
         resources={
-            r"/api/*": {"origins": app.config["CORS_ORIGINS"]},
-            r"/health": {"origins": app.config["CORS_ORIGINS"]},
+            r"/*": {"origins": "*" if use_wildcard else origins},
         },
-        supports_credentials=app.config["CORS_SUPPORTS_CREDENTIALS"],
+        supports_credentials=(
+            False if use_wildcard else app.config["CORS_SUPPORTS_CREDENTIALS"]
+        ),
         allow_headers=app.config["CORS_ALLOW_HEADERS"],
         methods=app.config["CORS_METHODS"],
         max_age=app.config["CORS_MAX_AGE"],
