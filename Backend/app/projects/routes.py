@@ -100,7 +100,6 @@ def create_project_comment(slug: str):
 
     schema = CommentCreateSchema(unknown=EXCLUDE)
     errors = schema.validate(payload)
-    print(errors)
     if errors:
         return json_response(
             data=None,
@@ -112,7 +111,6 @@ def create_project_comment(slug: str):
 
     # --- CAPTCHA verification ---
     token = payload.get("captcha_token")
-    print("captcha_tokennnnnnnnnnnn")
     if not token:
         return json_response(
             data=None,

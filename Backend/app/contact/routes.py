@@ -29,6 +29,7 @@ def sanitize_text(value: str) -> str:
 def create_contact_message():
 
     json_data = request.get_json(silent=True) or {}
+    print(json_data)
 
     errors = create_schema.validate(json_data)
     if errors:

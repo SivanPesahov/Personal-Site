@@ -8,6 +8,14 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { postProjectComment } from "../services/projects.service";
 import { Textarea } from "./ui/textarea";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "./ui/form";
 import { CAPTCHA_SITE_KEY } from "../config";
 
 const schema = z.object({
@@ -29,16 +37,16 @@ export default function CommentForm({
   className,
   onSuccess,
 }: Props) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting, isValid, isSubmitSuccessful },
-    reset,
-  } = useForm<FormValues>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     mode: "onChange",
     defaultValues: { name: "", email: "", content: "" },
   });
+  const {
+    handleSubmit,
+    formState: { isSubmitting, isValid, isSubmitSuccessful },
+    reset,
+  } = form;
 
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -46,7 +54,7 @@ export default function CommentForm({
 
   useEffect(() => {
     if (serverError) setServerError(null);
-  }, [serverError, errors]);
+  }, [serverError]);
 
   const onSubmit = async (values: FormValues) => {
     setServerError(null);
@@ -81,71 +89,89 @@ export default function CommentForm({
   return (
     <div className={cn("rounded-2xl border p-4 md:p-6 space-y-4", className)}>
       <h3 className="text-lg font-semibold">Add a Comment</h3>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div className="space-y-1">
-          <label className="text-sm">Name</label>
-          <Input placeholder="Your full name" {...register("name")} />
-          {errors.name && (
-            <p className="text-sm text-red-600">{errors.name.message}</p>
-          )}
-        </div>
-
-        <div className="space-y-1">
-          <label className="text-sm">Email</label>
-          <Input placeholder="your@email.com" {...register("email")} />
-          {errors.email && (
-            <p className="text-sm text-red-600">{errors.email.message}</p>
-          )}
-        </div>
-
-        <div className="space-y-1">
-          <label className="text-sm">Comment Content</label>
-          <Textarea
-            placeholder="What did you think about the project?"
-            rows={5}
-            {...register("content")}
+      <Form {...form}>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your full name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          {errors.content && (
-            <p className="text-sm text-red-600">{errors.content.message}</p>
-          )}
-        </div>
 
-        <div className="space-y-2">
-          <Turnstile
-            key={captchaKey}
-            sitekey={CAPTCHA_SITE_KEY}
-            onVerify={(token) => setCaptchaToken(token)}
-            onError={() => setServerError("CAPTCHA error, please refresh")}
-            onExpire={() => setCaptchaToken(null)}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="your@email.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          {!captchaToken && (
-            <p className="text-xs text-muted-foreground">
-              You must verify CAPTCHA before submitting.
-            </p>
+
+          <FormField
+            control={form.control}
+            name="content"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Comment Content</FormLabel>
+                <FormControl>
+                  <Textarea
+                    rows={5}
+                    placeholder="What did you think about the project?"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="hidden">
+            <Turnstile
+              key={captchaKey}
+              sitekey={CAPTCHA_SITE_KEY}
+              onVerify={(token) => setCaptchaToken(token)}
+              onError={() => setServerError("CAPTCHA error, please refresh")}
+              onExpire={() => setCaptchaToken(null)}
+            />
+            {!captchaToken && (
+              <p className="text-xs text-muted-foreground">
+                You must verify CAPTCHA before submitting.
+              </p>
+            )}
+          </div>
+
+          {serverError && (
+            <div className="rounded-md bg-red-50 p-3 text-sm text-red-700">
+              {serverError}
+            </div>
           )}
-        </div>
+          {isSubmitSuccessful && !serverError && (
+            <div className="rounded-md bg-green-50 p-3 text-sm text-green-700">
+              Your comment has been submitted and is awaiting approval (if
+              applicable).
+            </div>
+          )}
 
-        {serverError && (
-          <div className="rounded-md bg-red-50 p-3 text-sm text-red-700">
-            {serverError}
-          </div>
-        )}
-
-        {isSubmitSuccessful && !serverError && (
-          <div className="rounded-md bg-green-50 p-3 text-sm text-green-700">
-            Your comment has been submitted and is awaiting approval (if
-            applicable).
-          </div>
-        )}
-
-        <Button
-          type="submit"
-          disabled={!isValid || isSubmitting || !captchaToken}
-        >
-          {isSubmitting ? "Sending…" : "Submit Comment"}
-        </Button>
-      </form>
+          <Button
+            type="submit"
+            disabled={!isValid || isSubmitting || !captchaToken}
+          >
+            {isSubmitting ? "Sending…" : "Submit Comment"}
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 }

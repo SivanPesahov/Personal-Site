@@ -107,7 +107,6 @@ function ProjectPage() {
 
       <section style={{ marginTop: 24 }}>
         <h2>Description</h2>
-        {/* react-markdown כבר אינו מציג HTML גולמי כברירת מחדל, כך שהרינדור בטוח. */}
         <div style={{ lineHeight: 1.7 }}>
           <ReactMarkdown>{project.description_md || ""}</ReactMarkdown>
         </div>

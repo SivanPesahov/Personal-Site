@@ -40,3 +40,10 @@
 2025-10-14 15:15:53 [INFO] app - ✅ Flask app initialized and logging configured.
 2025-10-14 15:29:56 [INFO] app - ✅ Flask app initialized and logging configured.
 2025-10-14 15:29:56 [INFO] app - ✅ Flask app initialized and logging configured.
+2025-10-14 18:19:20 [INFO] app - ✅ Flask app initialized and logging configured.
+2025-10-14 18:19:21 [INFO] app - ✅ Flask app initialized and logging configured.
+2025-10-14 19:07:18 [WARNING] app - CAPTCHA token missing.
+2025-10-14 19:07:25 [WARNING] app - CAPTCHA token missing.
+2025-10-14 19:30:12 [INFO] app - ✅ Flask app initialized and logging configured.
+2025-10-14 19:31:19 [INFO] app - ✅ Flask app initialized and logging configured.
+2025-10-14 19:31:22 [WARNING] app - CAPTCHA token missing.
