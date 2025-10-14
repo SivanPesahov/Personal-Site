@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
+import CommentForm from "../components/CommentForm";
 import {
   getProjectBySlug,
   getProjectComments,
@@ -16,6 +17,7 @@ function ProjectPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [loadingComments, setLoadingComments] = useState(false);
+  const [commentsRefreshKey, setCommentsRefreshKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -54,7 +56,7 @@ function ProjectPage() {
     return () => {
       cancelled = true;
     };
-  }, [slug]);
+  }, [slug, commentsRefreshKey]);
 
   if (loading) return <div style={{ padding: 16 }}>Loading…</div>;
   if (error)
@@ -131,7 +133,12 @@ function ProjectPage() {
             </li>
           ))}
         </ul>
-        {/* Placeholder לטופס תגובה - נבנה בקובץ נפרד בהמשך */}
+        <div style={{ marginTop: 16 }}>
+          <CommentForm
+            projectSlug={slug}
+            onSuccess={() => setCommentsRefreshKey((k) => k + 1)}
+          />
+        </div>
       </section>
     </div>
   );

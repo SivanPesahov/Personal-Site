@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from sqlalchemy import or_, func, desc
 import bleach
+from marshmallow import EXCLUDE
 
 from app.utils.responses import json_response
 from app.models.models import Project, Comment
@@ -11,6 +12,7 @@ from app.projects.schemas import (
     CommentCreateSchema,
 )
 from app.extensions import db, limiter
+from app.services.verify_captcha import verify_captcha
 
 bp = Blueprint("projects", __name__)
 
@@ -65,7 +67,11 @@ def get_project(slug: str):
 def get_project_comments(slug: str):
     project = Project.query.filter_by(slug=slug).first()
     if not project:
-        return json_response(data=None, error="Project not found", status=404)
+        return json_response(
+            data=None,
+            error={"code": "NOT_FOUND", "message": "Project not found"},
+            status=404,
+        )
 
     comments = (
         Comment.query.filter_by(project_id=project.id)
@@ -90,8 +96,11 @@ def create_project_comment(slug: str):
         )
 
     payload = request.get_json(silent=True) or {}
-    schema = CommentCreateSchema()
+    print(payload)
+
+    schema = CommentCreateSchema(unknown=EXCLUDE)
     errors = schema.validate(payload)
+    print(errors)
     if errors:
         return json_response(
             data=None,
@@ -100,6 +109,32 @@ def create_project_comment(slug: str):
         )
 
     valid = schema.load(payload)
+
+    # --- CAPTCHA verification ---
+    token = payload.get("captcha_token")
+    print("captcha_tokennnnnnnnnnnn")
+    if not token:
+        return json_response(
+            data=None,
+            error={"code": "CAPTCHA_REQUIRED", "message": "captcha_token is required"},
+            status=400,
+        )
+
+    # detect client IP (supports proxy/CDN headers)
+    remote_ip = (
+        request.headers.get("CF-Connecting-IP")
+        or (request.headers.get("X-Forwarded-For") or "").split(",")[0].strip()
+        or request.remote_addr
+    )
+
+    ok = verify_captcha(token, remote_ip)
+    if not ok:
+        return json_response(
+            data=None,
+            error={"code": "CAPTCHA_FAILED", "message": "Captcha verification failed"},
+            status=400,
+        )
+    # --- end CAPTCHA verification ---
 
     clean_name = bleach.clean(valid["name"], tags=[], attributes={}, strip=True)
     clean_email = bleach.clean(valid["email"], tags=[], attributes={}, strip=True)
