@@ -10,7 +10,6 @@ export type Project = {
   image_url: string | null;
   repo_url: string | null;
   live_url: string | null;
-  is_featured: boolean;
   created_at: string; // ISO
   updated_at: string; // ISO
 };

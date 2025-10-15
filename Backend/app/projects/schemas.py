@@ -1,4 +1,5 @@
 from marshmallow import Schema, fields, validate, pre_load, post_dump
+import json
 
 
 class ProjectListSchema(Schema):
@@ -7,8 +8,16 @@ class ProjectListSchema(Schema):
     title = fields.Str()
     short_description = fields.Str(allow_none=True)
     image_url = fields.Str(allow_none=True)
+    images_json = fields.Str(allow_none=True)
+    images = fields.Method("get_images")
     repo_url = fields.Str(allow_none=True)
     live_url = fields.Str(allow_none=True)
+
+    def get_images(self, obj):
+        try:
+            return json.loads(obj.images_json) if obj.images_json else []
+        except Exception:
+            return []
 
 
 class CommentPublicSchema(Schema):
@@ -32,9 +41,17 @@ class ProjectDetailSchema(Schema):
     short_description = fields.Str(allow_none=True)
     description_md = fields.Str(allow_none=True)
     image_url = fields.Str(allow_none=True)
+    images_json = fields.Str(allow_none=True)
+    images = fields.Method("get_images")
     repo_url = fields.Str(allow_none=True)
     live_url = fields.Str(allow_none=True)
     comments = fields.List(fields.Nested(CommentPublicSchema))
+
+    def get_images(self, obj):
+        try:
+            return json.loads(obj.images_json) if obj.images_json else []
+        except Exception:
+            return []
 
 
 class CommentCreateSchema(Schema):

@@ -11,6 +11,7 @@ class Project(db.Model):
     short_description = db.Column(db.String(500))
     description_md = db.Column(db.Text)
     image_url = db.Column(db.String(1024))
+    images_json = db.Column(db.Text)
     repo_url = db.Column(db.String(1024))
     live_url = db.Column(db.String(1024))
 
