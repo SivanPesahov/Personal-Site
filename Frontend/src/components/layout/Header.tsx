@@ -22,7 +22,7 @@ function Header() {
         <div className="flex items-center justify-between px-5 py-3">
           <div className="flex items-center gap-3">
             <TextType
-              text={["Welcome to Sivan Pesahov's portfolio!"]}
+              text={["Sivan Pesahov's portfolio!"]}
               typingSpeed={75}
               pauseDuration={1500}
               showCursor={true}

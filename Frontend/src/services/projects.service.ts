@@ -8,6 +8,9 @@ export type Project = {
   short_description: string;
   description_md: string;
   image_url: string | null;
+  image_url_desktop?: string | null;
+  image_url_mobile?: string | null;
+  images_json: string | null;
   repo_url: string | null;
   live_url: string | null;
   created_at: string; // ISO

@@ -35,7 +35,8 @@ with app.app_context():
             "Next.js App Router + RabbitMQ + Redis + MySQL + Prisma.\n"
             "Realtime prices, risers/fallers, and 7-day history persisted to DB."
         ),
-        image_url="https://res.cloudinary.com/dipx5fuza/image/upload/v1760530334/Screenshot_2025-08-25_at_16.18.39_m9mtq9.png",  # placeholder hero image
+        image_url_desktop="https://res.cloudinary.com/dipx5fuza/image/upload/v1760530334/Screenshot_2025-08-25_at_16.18.39_m9mtq9.png",
+        image_url_mobile="https://res.cloudinary.com/dipx5fuza/image/upload/v1761128257/Screenshot_2025-10-22_at_13.17.05_o7nt40.png",
         repo_url="https://github.com/SivanPesahov/crypto-streamer",
         live_url="",
         images_json=json.dumps(
@@ -54,7 +55,8 @@ with app.app_context():
             "# Taskify\n\n"
             "Kanban boards, filters, and productivity analytics. Built with React, Node, and MySQL/Mongo (variants)."
         ),
-        image_url="https://res.cloudinary.com/dipx5fuza/image/upload/v1760530336/Screenshot_2025-09-01_at_13.35.41_zdp1jy.png",  # placeholder hero image
+        image_url_desktop="https://res.cloudinary.com/dipx5fuza/image/upload/v1760530336/Screenshot_2025-09-01_at_13.35.41_zdp1jy.png",
+        image_url_mobile="https://res.cloudinary.com/dipx5fuza/image/upload/v1761127784/Screenshot_2025-10-22_at_13.09.11_wkwiju.png",
         repo_url="https://github.com/SivanPesahov/Task-Management",
         live_url="https://task-management-e4on.onrender.com/",
         images_json=json.dumps(
@@ -77,7 +79,8 @@ with app.app_context():
             "# Relyon Landing\n\n"
             "Marketing landing with responsive layout, SEO meta, and contact form integration."
         ),
-        image_url="https://res.cloudinary.com/dipx5fuza/image/upload/v1760530336/Screenshot_2025-08-25_at_16.46.12_yi6jf5.png",
+        image_url_desktop="https://res.cloudinary.com/dipx5fuza/image/upload/v1760530336/Screenshot_2025-08-25_at_16.46.12_yi6jf5.png",
+        image_url_mobile="https://res.cloudinary.com/dipx5fuza/image/upload/v1760530336/Screenshot_2025-08-25_at_16.46.12_yi6jf5.png",
         repo_url="",
         live_url="https://www.relyon.ai/",
         images_json=json.dumps(
@@ -99,7 +102,8 @@ with app.app_context():
             "get AI insights, and optimize job search strategies.\n\n"
             "Built with React, Node.js, TypeScript, Express, MongoDB, and ShadCN UI."
         ),
-        image_url="https://images.unsplash.com/photo-1556761175-4b46a572b786?q=80&w=1600&auto=format&fit=crop",
+        image_url_desktop="https://res.cloudinary.com/dipx5fuza/image/upload/v1760530336/Screenshot_2025-08-25_at_16.46.12_yi6jf5.png",
+        image_url_mobile="https://res.cloudinary.com/dipx5fuza/image/upload/v1760530336/Screenshot_2025-08-25_at_16.46.12_yi6jf5.png",
         repo_url="https://github.com/SivanPesahov/Job-Flow",
         live_url="",
         images_json=json.dumps([]),
