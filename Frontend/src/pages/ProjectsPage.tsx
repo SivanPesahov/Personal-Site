@@ -9,9 +9,7 @@ import {
 } from "../components/ui/carousel";
 import { Card, CardContent } from "../components/ui/card";
 import { useMediaQuery } from "@uidotdev/usehooks";
-import TextType from "../components/TextType";
-import { useDarkMode } from "../contexts/DarkmodeContext";
-// Remove Next.js dynamic import and use React.lazy instead
+import Typing from "../components/Typing";
 const CardSwap = React.lazy(() => import("../components/CardSwap"));
 const SwapCard = React.lazy(() =>
   import("../components/CardSwap").then((m) => ({ default: m.Card }))
@@ -27,20 +25,16 @@ function ProjectsPage() {
     setMounted(true);
   }, []);
 
-  // Stable numeric sizing for CardSwap (avoids intermittent GSAP misplacement)
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [dims, setDims] = useState<{ w: number; h: number }>({ w: 0, h: 0 });
   const [imagesReady, setImagesReady] = useState<boolean>(false);
 
-  // Force fresh mount on BFCache/back navigation
   const [remountKey, setRemountKey] = useState(0);
   useEffect(() => {
     const onPageShow = (e: PageTransitionEvent) => {
-      // If restored from bfcache, re-mount CardSwap to reset GSAP state
       if (e && (e as any).persisted) setRemountKey((k) => k + 1);
     };
     window.addEventListener("pageshow", onPageShow);
-    // Also detect back/forward navigation via PerformanceNavigationTiming
     try {
       const nav = performance.getEntriesByType(
         "navigation"
@@ -144,8 +138,6 @@ function ProjectsPage() {
     });
   }, [projects.length]);
 
-  const { darkMode } = useDarkMode();
-
   return (
     <div className="max-w-5xl  mx-auto py-8">
       {loading && <p style={{ marginTop: 16 }}>Loading…</p>}
@@ -155,27 +147,15 @@ function ProjectsPage() {
         <div>
           <div className="text-center mb-8">
             <h1 className="text-3xl font-semibold text-gray-900 dark:text-white mb-2">
-              <TextType
-                text={["My Projects"]}
-                typingSpeed={75}
-                pauseDuration={1500}
-                showCursor={true}
-                cursorCharacter="|"
-                textColors={[darkMode ? "white" : "black"]}
-              />
+              <Typing strArr={["My Projects"]} />
             </h1>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              <TextType
-                text={[
+              <Typing
+                strArr={[
                   "Explore a selection of my personal and professional projects -",
                   "each designed, developed, and refined with attention to detail,",
                   "creativity, and clean code. You can scroll the area to discover more projects!",
                 ]}
-                typingSpeed={75}
-                pauseDuration={1500}
-                showCursor={true}
-                cursorCharacter="|"
-                textColors={[darkMode ? "white" : "black"]}
               />
             </p>
           </div>
@@ -221,27 +201,15 @@ function ProjectsPage() {
         <div className="flex items-center justify-between gap-8 ">
           <div className="flex-1 text-left space-y-4 max-w-md">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-              <TextType
-                text={["My Projects"]}
-                typingSpeed={75}
-                pauseDuration={1500}
-                showCursor={true}
-                cursorCharacter="|"
-                textColors={[darkMode ? "white" : "black"]}
-              />
+              <Typing strArr={["My Projects"]} />
             </h1>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-              <TextType
-                text={[
+              <Typing
+                strArr={[
                   "Explore a selection of my personal and professional projects -",
                   "each designed, developed, and refined with attention to detail,",
                   "creativity, and clean code. You can scroll the area to discover more projects!",
                 ]}
-                typingSpeed={75}
-                pauseDuration={1500}
-                showCursor={true}
-                cursorCharacter="|"
-                textColors={[darkMode ? "white" : "black"]}
               />
             </p>
           </div>

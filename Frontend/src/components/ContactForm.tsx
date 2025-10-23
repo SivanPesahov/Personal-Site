@@ -74,126 +74,122 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="flex justify-center max-w-2xl">
-      <GlassSurface width={"60vw"} height={"60vh"} borderRadius={24}>
-        <div className="w-full p-4">
-          <Form {...form}>
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="h-full space-y-14 flex flex-col max-w-2xl"
-            >
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium text-black/70 dark:text-white/80">
-                      Name
-                    </FormLabel>
-                    <FormControl>
-                      <GlassContainer>
-                        <Input
-                          placeholder="Your name"
-                          autoComplete="name"
-                          disabled={isSubmitting}
-                          className="w-full h-[6vh] rounded-xl border"
-                          {...field}
-                        />
-                      </GlassContainer>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <GlassSurface width={"full"} height={"60vh"} borderRadius={24}>
+      <div className="w-full p-4 flex justify-center">
+        <Form {...form}>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="h-full space-y-[4vh] flex flex-col w-full "
+          >
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className="w-[100%]">
+                  <FormLabel className="text-sm font-medium text-black/70 dark:text-white/80">
+                    Name
+                  </FormLabel>
+                  <FormControl>
+                    <GlassContainer>
+                      <Input
+                        placeholder="Your name"
+                        autoComplete="name"
+                        disabled={isSubmitting}
+                        className="w-full h-[6vh] rounded-xl border"
+                        {...field}
+                      />
+                    </GlassContainer>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium text-black/70 dark:text-white/80">
-                      Email
-                    </FormLabel>
-                    <FormControl>
-                      <GlassContainer>
-                        <Input
-                          type="email"
-                          placeholder="you@example.com"
-                          autoComplete="email"
-                          disabled={isSubmitting}
-                          className="w-full h-[6vh] rounded-xl border"
-                          {...field}
-                        />
-                      </GlassContainer>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem className="w-[100%]">
+                  <FormLabel className="text-sm font-medium text-black/70 dark:text-white/80">
+                    Email
+                  </FormLabel>
+                  <FormControl>
+                    <GlassContainer>
+                      <Input
+                        type="email"
+                        placeholder="you@example.com"
+                        autoComplete="email"
+                        disabled={isSubmitting}
+                        className="w-full h-[6vh] rounded-xl border"
+                        {...field}
+                      />
+                    </GlassContainer>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="message"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium text-black/70 dark:text-white/80">
-                      Message
-                    </FormLabel>
-                    <FormControl>
-                      <GlassContainer>
-                        <Textarea
-                          rows={6}
-                          placeholder="Write your message..."
-                          disabled={isSubmitting}
-                          className="w-full h-[12vh] rounded-2xl border border-white/20 bg-white/10 backdrop-blur-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:border-white/60 placeholder:text-black/50 dark:placeholder:text-white/50"
-                          {...field}
-                        />
-                      </GlassContainer>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="message"
+              render={({ field }) => (
+                <FormItem className="w-[100%]">
+                  <FormLabel className="text-sm font-medium text-black/70 dark:text-white/80">
+                    Message
+                  </FormLabel>
+                  <FormControl>
+                    <GlassContainer>
+                      <Textarea
+                        rows={6}
+                        placeholder="Write your message..."
+                        disabled={isSubmitting}
+                        className="w-full h-[12vh] rounded-2xl border border-white/20 bg-white/10 backdrop-blur-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:border-white/60 placeholder:text-black/50 dark:placeholder:text-white/50"
+                        {...field}
+                      />
+                    </GlassContainer>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <div className="hidden">
-                <Turnstile
-                  key={captchaKey}
-                  sitekey={CAPTCHA_SITE_KEY}
-                  onVerify={(token) => setCaptchaToken(token)}
-                  onError={() =>
-                    setServerError("CAPTCHA error, please refresh")
-                  }
-                  onExpire={() => setCaptchaToken(null)}
-                />
-                {!captchaToken && (
-                  <p className="text-xs text-black/60 dark:text-white/60">
-                    You must verify CAPTCHA before submitting.
-                  </p>
-                )}
-              </div>
-              <div className="flex justify-center">
-                <GlassContainer>
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className={`rounded-xl border border-white/20 bg-white/10 backdrop-blur-md px-5 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_8px_24px_rgba(0,0,0,0.2)] transition hover:bg-white/20 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_10px_28px_rgba(0,0,0,0.28)] focus-visible:ring-2 focus-visible:ring-white/40 ${
-                      darkMode ? "text-white/90" : "text-black/70"
-                    }`}
-                  >
-                    {serverError
-                      ? "Error!"
-                      : serverSuccess
-                      ? "Sent!"
-                      : isSubmitting
-                      ? "Sending..."
-                      : "Send Message"}
-                  </Button>
-                </GlassContainer>
-              </div>
-            </form>
-          </Form>
-        </div>
-      </GlassSurface>
-    </div>
+            <div className="hidden">
+              <Turnstile
+                key={captchaKey}
+                sitekey={CAPTCHA_SITE_KEY}
+                onVerify={(token) => setCaptchaToken(token)}
+                onError={() => setServerError("CAPTCHA error, please refresh")}
+                onExpire={() => setCaptchaToken(null)}
+              />
+              {!captchaToken && (
+                <p className="text-xs text-black/60 dark:text-white/60">
+                  You must verify CAPTCHA before submitting.
+                </p>
+              )}
+            </div>
+            <div className="flex justify-center">
+              <GlassContainer>
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`rounded-xl border border-white/20 bg-white/10 backdrop-blur-md px-5 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_8px_24px_rgba(0,0,0,0.2)] transition hover:bg-white/20 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_10px_28px_rgba(0,0,0,0.28)] focus-visible:ring-2 focus-visible:ring-white/40 ${
+                    darkMode ? "text-white/90" : "text-black/70"
+                  }`}
+                >
+                  {serverError
+                    ? "Error!"
+                    : serverSuccess
+                    ? "Sent!"
+                    : isSubmitting
+                    ? "Sending..."
+                    : "Send Message"}
+                </Button>
+              </GlassContainer>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </GlassSurface>
   );
 }

@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { useDarkMode } from "../../contexts/DarkmodeContext";
 import { Button } from "../ui/button";
-import TextType from "../TextType";
 import { useState } from "react";
 import GlassSurface from "../GlassSurface";
+import Typing from "../Typing";
 
 function Header() {
   const { darkMode, toggleDarkMode } = useDarkMode();
@@ -21,14 +21,7 @@ function Header() {
       <GlassSurface width={"min(92vw, 1100px)"} borderRadius={80}>
         <div className="flex items-center justify-between w-full max-w-7xl px-5 py-3">
           <div className="flex items-center gap-3">
-            <TextType
-              text={["Sivan Pesahov's portfolio!"]}
-              typingSpeed={75}
-              pauseDuration={1500}
-              showCursor={true}
-              cursorCharacter="|"
-              textColors={[darkMode ? "white" : "black"]}
-            />
+            <Typing strArr={["Sivan Pesahov's portfolio!"]} />
           </div>
 
           <nav className="hidden md:flex items-center gap-6">
@@ -88,14 +81,7 @@ function Header() {
           <div className="flex h-full flex-col justify-between p-4">
             <div>
               <div className="flex items-center justify-between pb-2">
-                <TextType
-                  text={["Menu"]}
-                  typingSpeed={75}
-                  pauseDuration={1500}
-                  showCursor={true}
-                  cursorCharacter="|"
-                  textColors={[darkMode ? "white" : "black"]}
-                />
+                <Typing strArr={["Menu"]} />
               </div>
 
               <nav className="mt-[2vh] flex flex-col gap-2">
