@@ -1,83 +1,99 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import GlassSurface from "../components/GlassSurface";
 
 function AboutPage() {
   return (
-    <main className="max-w-3xl mx-auto px-4 py-8 leading-7">
-      <h1 className="text-3xl font-bold mb-4">About Me — סיון פסחוב</h1>
+    <main className="px-4 py-10">
+      <div className="max-w-3xl mx-auto">
+        <GlassSurface width={"100%"} height={"auto"} borderRadius={24}>
+          <section className="p-6 sm:p-8">
+            <h1 className="text-3xl sm:text-4xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-neutral-900 via-neutral-700 to-neutral-900 dark:from-neutral-100 dark:via-neutral-300 dark:to-neutral-100">
+              About Me - Sivan Pesahov
+            </h1>
 
-      <p className="mb-4">
-        היי! אני סיון פסחוב, מפתח פול־סטאק עם פוקוס חזק על Frontend ומערכות
-        בזמן־אמת. אני בונה אפליקציות סקיילביליות מקצה לקצה עם{" "}
-        <strong>React/Next.js</strong>, צד־שרת ב־<strong>Node.js</strong> או{" "}
-        <strong>Python/Flask</strong>, עבודה עם
-        <strong> REST APIs</strong>, ו־DB רלציוני/NoSQL. בוגר תוכנית
-        <strong> “לוחמים להייטק”</strong> עם התמחות ב־Relyon, ועם רקע פיקודי
-        מצה"ל שמביא איתו עבודה מדויקת תחת לחץ, תיעדוף נכון ותשומת לב לפרטים.
-      </p>
+            <p className="mb-4 text-neutral-700 dark:text-neutral-200">
+              Hi! I'm Sivan Pesahov, a Full-Stack Developer with a strong focus
+              on Frontend and real-time systems. I build scalable end-to-end
+              applications with <strong>React/Next.js</strong>, backend services
+              in <strong>Node.js</strong> or <strong>Python/Flask</strong>, work
+              with <strong>REST APIs</strong>, and relational/NoSQL databases.
+              I'm a graduate of the “Warriors to High-Tech” program with an
+              internship at Relyon, bringing precise execution under pressure,
+              smart prioritization, and attention to detail.
+            </p>
 
-      <p className="mb-4">
-        בפרויקטים האחרונים שלי שילבתי <strong>Redis</strong> ו־
-        <strong>RabbitMQ</strong> לזרימות נתונים, ו־<strong>MySQL</strong> עם
-        ORM כמו
-        <strong> Prisma</strong> או <strong>SQLAlchemy</strong> לצד מיגרציות עם
-        <strong> Alembic</strong>. בין הפרויקטים הבולטים:{" "}
-        <em>Crypto‑Streamer</em>
-        (דשבורד בזמן־אמת לנתוני קריפטו), <em>Taskify</em> (ניהול משימות), ו־
-        <em>Personal‑Site</em> (האתר הנוכחי) שמחבר Flask + Next.js.
-      </p>
+            <p className="mb-4 text-neutral-700 dark:text-neutral-200">
+              Before transitioning into tech, I served as a combat soldier and
+              team leader in a classified operational unit within the IDF’s
+              Intelligence Directorate. That experience shaped my discipline,
+              problem-solving mindset, and ability to perform under pressure —
+              qualities I now bring into software development.
+            </p>
 
-      <p className="mb-6">
-        אני אוהב קוד נקי, בדיקות ידניות מסודרות, אוטומציה, ו־UX בעל ביצועים
-        גבוהים ונגישות. פתוח לאתגר הבא בצוות איכותי — ומחפש סביבות שבהן אפשר
-        ללמוד מהר, לקחת אחריות ולהניע פיצ'רים מקצה לקצה.
-      </p>
+            <p className="mb-6 text-neutral-700 dark:text-neutral-200">
+              I value clean code, thoughtful manual checks, automation, and
+              high-performance, accessible UX. I’m open to the next challenge in
+              a strong team—places where I can learn fast, take ownership, and
+              ship features end-to-end.
+            </p>
 
-      <section aria-label="Skills" className="mb-7">
-        <h2 className="text-xl font-semibold mb-2">Stack ויכולות</h2>
-        <ul className="flex flex-wrap gap-2 list-none p-0">
-          {[
-            "React",
-            "Next.js",
-            "TypeScript",
-            "Node.js",
-            "Express",
-            "Python",
-            "Flask",
-            "REST APIs",
-            "MySQL",
-            "Prisma",
-            "SQLAlchemy",
-            "Alembic",
-            "Redis",
-            "RabbitMQ",
-            "Tailwind CSS",
-            "Auth / JWT / NextAuth",
-          ].map((skill) => (
-            <li
-              key={skill}
-              className="border border-neutral-200 dark:border-neutral-700 rounded-full px-3 py-1 text-sm bg-white dark:bg-neutral-900"
-            >
-              {skill}
-            </li>
-          ))}
-        </ul>
-      </section>
+            <div className="border-t border-neutral-200/60 dark:border-neutral-800/60 my-6" />
 
-      <div className="flex gap-3">
-        <a
-          href="/CV-Sivan-Pesahov.pdf"
-          download
-          className="inline-flex items-center px-4 py-2 rounded-md border border-neutral-900 dark:border-neutral-100 font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition"
-        >
-          Download CV
-        </a>
-        <Link
-          to="/contact"
-          className="inline-flex items-center px-4 py-2 rounded-md border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition"
-        >
-          צור קשר
-        </Link>
+            <section aria-label="Skills" className="mb-6">
+              <h2 className="text-xl font-semibold mb-3">Stack &amp; Skills</h2>
+              <ul className="flex flex-wrap gap-2 justify-center list-none p-0">
+                {[
+                  "React",
+                  "Next.js",
+                  "TypeScript",
+                  "Node.js",
+                  "Express",
+                  "Python",
+                  "Flask",
+                  "REST APIs",
+                  "MySQL",
+                  "Prisma",
+                  "SQLAlchemy",
+                  "Alembic",
+                  "Redis",
+                  "RabbitMQ",
+                  "Tailwind CSS",
+                  "Auth / JWT / NextAuth",
+                ].map((skill) => (
+                  <li key={skill} className="p-0 border-0 bg-transparent">
+                    <GlassSurface
+                      width={"auto"}
+                      height={"auto"}
+                      borderRadius={999}
+                    >
+                      <div className="px-3 py-1 text-sm">{skill}</div>
+                    </GlassSurface>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <div className="flex flex-wrap justify-center items-center gap-3 pt-2">
+              <GlassSurface width={"auto"} height={"auto"} borderRadius={12}>
+                <a
+                  href="/CV-Sivan-Pesahov.pdf"
+                  download
+                  className="inline-flex items-center px-4 py-2 rounded-md font-semibold hover:opacity-90 transition"
+                >
+                  Download CV
+                </a>
+              </GlassSurface>
+              <GlassSurface width={"auto"} height={"auto"} borderRadius={12}>
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center px-4 py-2 rounded-md hover:opacity-90 transition"
+                >
+                  Contact
+                </Link>
+              </GlassSurface>
+            </div>
+          </section>
+        </GlassSurface>
       </div>
     </main>
   );

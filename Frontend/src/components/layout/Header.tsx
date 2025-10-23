@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { useDarkMode } from "../../contexts/DarkmodeContext";
 import { Button } from "../ui/button";
-import { GlassContainer } from "../GlassContainer";
 import TextType from "../TextType";
 import { useState } from "react";
+import GlassSurface from "../GlassSurface";
 
 function Header() {
   const { darkMode, toggleDarkMode } = useDarkMode();
@@ -18,8 +18,8 @@ function Header() {
 
   return (
     <header className="sticky top-0 z-50 flex w-full justify-center px-3 pt-3">
-      <GlassContainer className="w-[min(92vw,1100px)] pointer-events-auto rounded-full">
-        <div className="flex items-center justify-between px-5 py-3">
+      <GlassSurface width={"min(92vw, 1100px)"} borderRadius={80}>
+        <div className="flex items-center justify-between w-full max-w-7xl px-5 py-3">
           <div className="flex items-center gap-3">
             <TextType
               text={["Sivan Pesahov's portfolio!"]}
@@ -65,7 +65,7 @@ function Header() {
             </Button>
           </div>
         </div>
-      </GlassContainer>
+      </GlassSurface>
 
       <div
         className={`fixed inset-0 z-50 md:hidden ${

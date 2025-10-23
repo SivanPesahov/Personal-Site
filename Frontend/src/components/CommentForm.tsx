@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Turnstile from "react-turnstile";
-import { cn } from "../lib/utils";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { postProjectComment } from "../services/projects.service";
@@ -17,6 +16,7 @@ import {
   FormMessage,
 } from "./ui/form";
 import { CAPTCHA_SITE_KEY } from "../config";
+import GlassSurface from "./GlassSurface";
 
 const schema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -28,15 +28,10 @@ type FormValues = z.infer<typeof schema>;
 
 type Props = {
   projectSlug: string;
-  className?: string;
   onSuccess?: () => void;
 };
 
-export default function CommentForm({
-  projectSlug,
-  className,
-  onSuccess,
-}: Props) {
+export default function CommentForm({ projectSlug, onSuccess }: Props) {
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     mode: "onChange",
@@ -87,91 +82,99 @@ export default function CommentForm({
   };
 
   return (
-    <div className={cn("rounded-2xl border p-4 md:p-6 space-y-4", className)}>
-      <h3 className="text-lg font-semibold">Add a Comment</h3>
-      <Form {...form}>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm">Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Your full name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <GlassSurface width={"100%"} height={"auto"} borderRadius={24}>
+      <div className="w-full p-2">
+        <h3 className="text-lg font-semibold">Add a Comment</h3>
+        <div className="w-full">
+          <Form {...form}>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-4 w-full"
+            >
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm">Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Your full name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm">Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="your@email.com" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm">Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="your@email.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="content"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm">Comment Content</FormLabel>
-                <FormControl>
-                  <Textarea
-                    rows={5}
-                    placeholder="What did you think about the project?"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name="content"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm">Comment Content</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        rows={5}
+                        placeholder="What did you think about the project?"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <div className="hidden">
-            <Turnstile
-              key={captchaKey}
-              sitekey={CAPTCHA_SITE_KEY}
-              onVerify={(token) => setCaptchaToken(token)}
-              onError={() => setServerError("CAPTCHA error, please refresh")}
-              onExpire={() => setCaptchaToken(null)}
-            />
-            {!captchaToken && (
-              <p className="text-xs text-muted-foreground">
-                You must verify CAPTCHA before submitting.
-              </p>
-            )}
-          </div>
+              <div className="hidden">
+                <Turnstile
+                  key={captchaKey}
+                  sitekey={CAPTCHA_SITE_KEY}
+                  onVerify={(token) => setCaptchaToken(token)}
+                  onError={() =>
+                    setServerError("CAPTCHA error, please refresh")
+                  }
+                  onExpire={() => setCaptchaToken(null)}
+                />
+                {!captchaToken && (
+                  <p className="text-xs text-muted-foreground">
+                    You must verify CAPTCHA before submitting.
+                  </p>
+                )}
+              </div>
 
-          {serverError && (
-            <div className="rounded-md bg-red-50 p-3 text-sm text-red-700">
-              {serverError}
-            </div>
-          )}
-          {isSubmitSuccessful && !serverError && (
-            <div className="rounded-md bg-green-50 p-3 text-sm text-green-700">
-              Your comment has been submitted and is awaiting approval (if
-              applicable).
-            </div>
-          )}
+              {serverError && (
+                <div className="rounded-md bg-red-50 p-3 text-sm text-red-700">
+                  {serverError}
+                </div>
+              )}
+              {isSubmitSuccessful && !serverError && (
+                <div className="rounded-md bg-green-50 p-3 text-sm text-green-700">
+                  Your comment has been submitted!
+                </div>
+              )}
 
-          <Button
-            type="submit"
-            disabled={!isValid || isSubmitting || !captchaToken}
-          >
-            {isSubmitting ? "Sending…" : "Submit Comment"}
-          </Button>
-        </form>
-      </Form>
-    </div>
+              <Button
+                type="submit"
+                disabled={!isValid || isSubmitting || !captchaToken}
+              >
+                {isSubmitting ? "Sending…" : "Submit Comment"}
+              </Button>
+            </form>
+          </Form>
+        </div>
+      </div>
+    </GlassSurface>
   );
 }

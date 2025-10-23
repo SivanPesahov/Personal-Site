@@ -9,6 +9,8 @@ import {
 } from "../components/ui/carousel";
 import { Card, CardContent } from "../components/ui/card";
 import { useMediaQuery } from "@uidotdev/usehooks";
+import TextType from "../components/TextType";
+import { useDarkMode } from "../contexts/DarkmodeContext";
 // Remove Next.js dynamic import and use React.lazy instead
 const CardSwap = React.lazy(() => import("../components/CardSwap"));
 const SwapCard = React.lazy(() =>
@@ -71,7 +73,6 @@ function ProjectsPage() {
       cancelled = true;
     };
   }, []);
-  console.log(projects);
 
   function getPrimaryImage(p: Project): string {
     if (isMobile && p.image_url_mobile) return p.image_url_mobile;
@@ -143,6 +144,8 @@ function ProjectsPage() {
     });
   }, [projects.length]);
 
+  const { darkMode } = useDarkMode();
+
   return (
     <div className="max-w-5xl  mx-auto py-8">
       {loading && <p style={{ marginTop: 16 }}>Loading…</p>}
@@ -152,13 +155,28 @@ function ProjectsPage() {
         <div>
           <div className="text-center mb-8">
             <h1 className="text-3xl font-semibold text-gray-900 dark:text-white mb-2">
-              My Projects
+              <TextType
+                text={["My Projects"]}
+                typingSpeed={75}
+                pauseDuration={1500}
+                showCursor={true}
+                cursorCharacter="|"
+                textColors={[darkMode ? "white" : "black"]}
+              />
             </h1>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Explore a selection of my personal and professional projects -
-              each designed, developed, and refined with attention to detail,
-              creativity, and clean code. you can scroll the area to discover
-              more projects!
+              <TextType
+                text={[
+                  "Explore a selection of my personal and professional projects -",
+                  "each designed, developed, and refined with attention to detail,",
+                  "creativity, and clean code. You can scroll the area to discover more projects!",
+                ]}
+                typingSpeed={75}
+                pauseDuration={1500}
+                showCursor={true}
+                cursorCharacter="|"
+                textColors={[darkMode ? "white" : "black"]}
+              />
             </p>
           </div>
           <Carousel
@@ -185,12 +203,9 @@ function ProjectsPage() {
                             />
                           </div>
                           <GlassContainer className="relative m-3 p-4 rounded-2xl bg-white/10 dark:bg-white/5 backdrop-blur-xl ring-1 ring-white/20 shadow-[0_6px_24px_rgba(0,0,0,0.20)] text-gray-900 dark:text-gray-100 overflow-hidden before:content-[''] before:absolute before:-inset-0.5 before:rounded-[1.25rem] before:bg-gradient-to-br before:from-white/50 before:to-transparent before:opacity-20 before:blur-xl after:content-[''] after:absolute after:inset-px after:rounded-[1.15rem] after:bg-white/5 after:opacity-60">
-                            <h3 className="text-lg font-semibold line-clamp-1">
+                            <h3 className="text-lg font-semibold text-center line-clamp-1">
                               {item.title}
                             </h3>
-                            {item.description ? (
-                              <p className="mt-1 text-sm">{item.description}</p>
-                            ) : null}
                           </GlassContainer>
                         </CardContent>
                       </Card>
@@ -206,13 +221,28 @@ function ProjectsPage() {
         <div className="flex items-center justify-between gap-8 ">
           <div className="flex-1 text-left space-y-4 max-w-md">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-              My Projects
+              <TextType
+                text={["My Projects"]}
+                typingSpeed={75}
+                pauseDuration={1500}
+                showCursor={true}
+                cursorCharacter="|"
+                textColors={[darkMode ? "white" : "black"]}
+              />
             </h1>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-              Explore a selection of my personal and professional projects —
-              each designed, developed, and refined with attention to detail,
-              creativity, and clean code. Scroll through to discover more
-              projects or click a card to learn more.
+              <TextType
+                text={[
+                  "Explore a selection of my personal and professional projects -",
+                  "each designed, developed, and refined with attention to detail,",
+                  "creativity, and clean code. You can scroll the area to discover more projects!",
+                ]}
+                typingSpeed={75}
+                pauseDuration={1500}
+                showCursor={true}
+                cursorCharacter="|"
+                textColors={[darkMode ? "white" : "black"]}
+              />
             </p>
           </div>
           <div
@@ -228,14 +258,15 @@ function ProjectsPage() {
                   height={dims.h}
                   cardDistance={64}
                   verticalDistance={72}
-                  delay={2500}
+                  skewAmount={6}
+                  delay={3000}
                   easing="elastic"
                 >
                   {items.map((item) => (
                     <SwapCard
                       key={item.link}
                       onClick={() => (window.location.href = item.link)}
-                      className="shadow-2xl hover:scale-[1.02] transition-transform duration-300 rounded-3xl ring-1 ring-white/10 backdrop-blur-xl bg-white/5 dark:bg-white/0"
+                      className="shadow-2xl hover:scale-[1.02] rounded-3xl ring-1 ring-white/10 backdrop-blur-xl bg-white/5 dark:bg-white/0"
                     >
                       <div className="relative w-full h-full rounded-3xl overflow-hidden">
                         <span
@@ -249,7 +280,7 @@ function ProjectsPage() {
                           loading="lazy"
                         />
                         <GlassContainer className="absolute bottom-3 left-3 right-3 p-4 rounded-2xl bg-white/10 dark:bg-white/5 backdrop-blur-xl ring-1 ring-white/20 shadow-[0_6px_24px_rgba(0,0,0,0.20)] text-white overflow-hidden before:content-[''] before:absolute before:-inset-0.5 before:rounded-[1.25rem] before:bg-gradient-to-br before:from-white/40 before:to-transparent before:opacity-20 before:blur-xl after:content-[''] after:absolute after:inset-px after:rounded-[1.15rem] after:bg-white/5 after:opacity-60">
-                          <h3 className="text-lg font-semibold">
+                          <h3 className="text-lg font-semibold text-center">
                             {item.title}
                           </h3>
                         </GlassContainer>
