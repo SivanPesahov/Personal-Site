@@ -7,6 +7,7 @@ from app.error_handlers import register_error_handlers
 from .contact.routes import bp as contact_bp
 import logging
 from logging.handlers import RotatingFileHandler
+import re
 
 
 def create_app(config_object=Config):
@@ -45,29 +46,41 @@ def create_app(config_object=Config):
     limiter.init_app(app)
     mail.init_app(app)
     # --- CORS init ---
-    # Parse comma-separated CORS_ORIGINS from env/config, or allow "*" in debug
+    # Parse comma-separated CORS_ORIGINS from env/config, support regex via prefix "regex:"
     origins_raw = app.config.get("CORS_ORIGINS", "*")
     if isinstance(origins_raw, str):
-        origins = (
-            "*"
+        origins_list = (
+            ["*"]
             if origins_raw.strip() == "*"
             else [o.strip() for o in origins_raw.split(",") if o.strip()]
         )
     else:
-        origins = origins_raw
+        origins_list = origins_raw if origins_raw is not None else ["*"]
 
+    # Compile regex entries like: regex:https://.*\.vercel\.app
+    compiled_origins = []
+    for o in origins_list:
+        if isinstance(o, str) and o.lower().startswith("regex:"):
+            pattern = o[len("regex:") :].strip()
+            try:
+                compiled_origins.append(re.compile(pattern))
+            except re.error:
+                # Ignore invalid regex so the app still boots
+                continue
+        else:
+            compiled_origins.append(o)
+
+    # In debug we can allow wildcard (*) to ease local testing
     is_debug = bool(app.config.get("DEBUG"))
-    use_wildcard = is_debug and origins != "*"
+    use_wildcard = is_debug and compiled_origins != ["*"]
 
     cors.init_app(
         app,
         resources={
-            r"/api/*": {"origins": "*" if use_wildcard else origins},
-            r"/health": {"origins": "*" if use_wildcard else origins},
+            r"/api/*": {"origins": "*" if use_wildcard else compiled_origins},
+            r"/health": {"origins": "*" if use_wildcard else compiled_origins},
         },
-        supports_credentials=(
-            False if use_wildcard else app.config["CORS_SUPPORTS_CREDENTIALS"]
-        ),
+        supports_credentials=False,
         allow_headers=app.config["CORS_ALLOW_HEADERS"],
         methods=app.config["CORS_METHODS"],
         max_age=app.config["CORS_MAX_AGE"],
