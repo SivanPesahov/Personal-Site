@@ -123,7 +123,6 @@ with app.app_context():
                 name="Sivan",
                 email="sivan@example.com",
                 content="Awesome work!",
-                is_approved=True,
             )
         )
         db.session.commit()

@@ -1,4 +1,6 @@
-import { FC, useRef, useState, useEffect, MutableRefObject } from "react";
+import { useRef, useState, useEffect } from "react";
+import type { FC } from "react";
+import type { MutableRefObject } from "react";
 import { useNavigate } from "react-router-dom";
 import { mat4, quat, vec2, vec3 } from "gl-matrix";
 
