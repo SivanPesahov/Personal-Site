@@ -3,6 +3,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 import bleach
 import re
+import socket
 
 from app.extensions import db, limiter
 from app.models import ContactMessage
@@ -29,7 +30,9 @@ def sanitize_text(value: str) -> str:
 def create_contact_message():
 
     json_data = request.get_json(silent=True) or {}
-    print(json_data)
+    current_app.logger.info(
+        "[contact] received payload: keys=%s", list((json_data or {}).keys())
+    )
 
     errors = create_schema.validate(json_data)
     if errors:
@@ -54,7 +57,10 @@ def create_contact_message():
         cf_ip or (xff.split(",")[0].strip() if xff else None)
     ) or request.remote_addr
 
+    current_app.logger.info("[contact] verifying captcha (ip=%s)", remote_ip)
+
     if not verify_captcha(token=token, remote_ip=remote_ip):
+        current_app.logger.warning("[contact] captcha failed")
         return (
             jsonify(
                 {
@@ -67,6 +73,7 @@ def create_contact_message():
             ),
             400,
         )
+    current_app.logger.info("[contact] captcha ok")
     # ---- end CAPTCHA verification ----
 
     name_clean = sanitize_text(name)
@@ -107,9 +114,21 @@ def create_contact_message():
             500,
         )
 
+    if current_app.config.get("MAIL_SUPPRESS_SEND", False):
+        current_app.logger.info(
+            "[contact] MAIL_SUPPRESS_SEND=true -> skipping SMTP and returning success"
+        )
+        return jsonify({"data": public_schema.dump(cm), "error": None}), 201
+
     try:
+        prev_to = socket.getdefaulttimeout()
+        socket.setdefaulttimeout(5)
+        current_app.logger.info("[contact] sending email via SMTP…")
         send_contact_email(name=name_clean, email=email.strip(), message=message_clean)
+        current_app.logger.info("[contact] email sent")
     except Exception as e:
-        current_app.logger.exception("Failed to send contact email: %s", e)
+        current_app.logger.exception("[contact] Failed to send contact email: %s", e)
+    finally:
+        socket.setdefaulttimeout(prev_to)
 
     return jsonify({"data": public_schema.dump(cm), "error": None}), 201
