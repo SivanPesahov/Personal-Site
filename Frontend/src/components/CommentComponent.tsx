@@ -10,7 +10,7 @@ function CommentComponent({ name, created_at, content }: CommentProps) {
   return (
     <>
       <GlassSurface width={"100%"} height={"auto"} borderRadius={24}>
-        <div className="w-full p-2 flex flex-col gap-2">
+        <div className="w-full p-4 flex flex-col gap-2">
           <div className="font-semibold text-gray-900 dark:text-white">
             User: {name}
           </div>

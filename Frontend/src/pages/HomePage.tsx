@@ -1,23 +1,25 @@
 import { Link } from "react-router-dom";
 import GlassSurface from "../components/GlassSurface";
+import Typing from "../components/Typing";
 
 function HomePage() {
   return (
     <>
-      <main className="flex flex-col lg:flex-row lg:justify-around items-center">
-        <section className="order-2 lg:order-1 w-[90%] flex flex-col lg:w-[50vw] lg:py-[20vh] ">
+      <main className="h-[80vh] lg:h-full flex flex-col justify-between lg:flex-row lg:justify-between items-center">
+        <section className="order-2 lg:order-1 w-[90%] flex flex-col lg:w-[50vw] lg:py-[18vh] lg:px-[8vw] ">
           <p className="text-sm font-semibold tracking-widest text-gray-600 text-center lg:text-start py-2">
             HI, I’M SIVAN
           </p>
 
           <h1 className="text-4xl sm:text-6xl font-extrabold leading-tight tracking-tight py-2">
-            I’M A FULL-STACK DEVELOPER
+            <Typing strArr={["I’M A FULL-STACK DEVELOPER"]} />
           </h1>
 
-          <p className="  mx-auto text-base sm:text-lg text-gray-600 py-2 lg:text-start">
-            I design and build modern, performant web apps with React/Next.js on
-            the frontend and Flask/Python on the backend. Clean UX, strong
-            engineering, and shipping value fast.
+          <p className="mx-auto text-base sm:text-lg text-gray-600 py-2 lg:text-start">
+            I design and build modern, high-performance web applications using
+            React and Next.js on the frontend, and Express (Node.js) or Flask
+            (Python) on the backend. I focus on clean UX, solid engineering, and
+            delivering real value fast.
           </p>
 
           <div className="flex mt-2 lg:w-[40vw]">
@@ -73,7 +75,7 @@ function HomePage() {
           <img
             src="/ProfileWithoutBG.png"
             alt="Sivan Pesahov portrait"
-            className="rounded-[2rem] object-cover h-[32vh] lg:h-[64vh]"
+            className="lg:rounded-[0rem] rounded-[2rem] object-cover h-[32vh] lg:h-[88vh]"
             loading="eager"
           />
         </section>

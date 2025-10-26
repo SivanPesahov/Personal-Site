@@ -10,6 +10,7 @@ import {
 import { Card, CardContent } from "../components/ui/card";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import Typing from "../components/Typing";
+import GlassSurface from "../components/GlassSurface";
 const CardSwap = React.lazy(() => import("../components/CardSwap"));
 const SwapCard = React.lazy(() =>
   import("../components/CardSwap").then((m) => ({ default: m.Card }))
@@ -145,19 +146,10 @@ function ProjectsPage() {
 
       {isMobile && (
         <div>
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-semibold text-gray-900 dark:text-white mb-2">
+          <div>
+            <h1 className="text-3xl font-semibold text-gray-900 dark:text-white mb-2 text-center">
               <Typing strArr={["My Projects"]} />
             </h1>
-            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              <Typing
-                strArr={[
-                  "Explore a selection of my personal and professional projects -",
-                  "each designed, developed, and refined with attention to detail,",
-                  "creativity, and clean code. You can scroll the area to discover more projects!",
-                ]}
-              />
-            </p>
           </div>
           <Carousel
             className="w-full max-w-sm mx-auto"
@@ -195,25 +187,33 @@ function ProjectsPage() {
               ))}
             </CarouselContent>
           </Carousel>
+          <footer className="py-[8vh] flex justify-center items-center">
+            <GlassSurface
+              width={"90%"}
+              height={"auto"}
+              borderRadius={24}
+              className="text-gray-600 dark:text-gray-300 px-4"
+            >
+              Take a look at some of my featured projects, each one crafted with
+              care, creativity, and a strong focus on clean design and code.
+              Swipe through to explore more of my work!
+            </GlassSurface>
+          </footer>
         </div>
       )}
       {!isMobile && (
-        <div className="flex items-center justify-between gap-8 ">
-          <div className="flex-1 text-left space-y-4 max-w-md">
+        <main className="flex items-center justify-between gap-8 ">
+          <section className="flex-1 text-left space-y-4 max-w-md">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
               <Typing strArr={["My Projects"]} />
             </h1>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-              <Typing
-                strArr={[
-                  "Explore a selection of my personal and professional projects -",
-                  "each designed, developed, and refined with attention to detail,",
-                  "creativity, and clean code. You can scroll the area to discover more projects!",
-                ]}
-              />
+              Take a look at some of my featured projects, each one crafted with
+              care, creativity, and a strong focus on clean design and code.
+              Press on a project to find out more!
             </p>
-          </div>
-          <div
+          </section>
+          <section
             ref={containerRef}
             className="relative flex-1"
             style={{ height: (dims.h || 640) * 0.9, marginTop: "8vh" }}
@@ -258,8 +258,8 @@ function ProjectsPage() {
                 </CardSwap>
               )}
             </Suspense>
-          </div>
-        </div>
+          </section>
+        </main>
       )}
     </div>
   );

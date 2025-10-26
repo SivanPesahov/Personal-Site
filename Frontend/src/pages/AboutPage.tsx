@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import GlassSurface from "../components/GlassSurface";
+import Typing from "../components/Typing";
 
 function AboutPage() {
   return (
@@ -8,7 +9,7 @@ function AboutPage() {
         <GlassSurface width={"100%"} height={"auto"} borderRadius={24}>
           <section className="p-6 sm:p-8">
             <h1 className="text-3xl sm:text-4xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-neutral-900 via-neutral-700 to-neutral-900 dark:from-neutral-100 dark:via-neutral-300 dark:to-neutral-100">
-              About Me - Sivan Pesahov
+              <Typing strArr={["About Me - Sivan Pesahov"]} />
             </h1>
 
             <p className="mb-4 text-neutral-700 dark:text-neutral-200">

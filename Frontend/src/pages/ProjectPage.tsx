@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import CommentForm from "../components/CommentForm";
-import GradualBlur from "../components/GradualBlur";
 import {
   getProjectBySlug,
   getProjectComments,
@@ -13,6 +12,7 @@ import GlassSurface from "../components/GlassSurface";
 
 import CommentComponent from "../components/CommentComponent";
 import ProjectPicsCarusel from "../components/ProjectPicsCarusel";
+import Typing from "../components/Typing";
 
 function ProjectPage() {
   const { slug = "" } = useParams();
@@ -80,12 +80,12 @@ function ProjectPage() {
       })();
 
   return (
-    <section className="relative h-full overflow-hidden pt-[2vh]">
+    <section className="relative  overflow-hidden pt-[2vh]">
       <div className="h-full overflow-y-auto px-[2%] mb-[6%]">
         <div className="max-w-4xl mx-auto">
           <header className="text-center mb-8">
             <h1 className="mt-0 text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-neutral-900 via-neutral-700 to-neutral-900 dark:from-white dark:via-neutral-300 dark:to-white drop-shadow-sm">
-              {project.title}
+              <Typing strArr={[project.title]} />
             </h1>
             <p className="mt-2 text-base text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto leading-relaxed">
               {project.short_description}
@@ -136,7 +136,7 @@ function ProjectPage() {
 
           <section className="mt-10">
             <GlassSurface width={"100%"} height={"auto"} borderRadius={24}>
-              <div className="p-6 text-left">
+              <div className="p-6 text-left w-full">
                 <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100 mb-3">
                   Description
                 </h2>
@@ -166,26 +166,14 @@ function ProjectPage() {
                 </li>
               ))}
             </ul>
-            <div className="mt-4">
-              <CommentForm
-                projectSlug={slug}
-                onSuccess={() => setCommentsRefreshKey((k) => k + 1)}
-              />
-            </div>
+          </section>
+          <section className="mt-4">
+            <CommentForm
+              projectSlug={slug}
+              onSuccess={() => setCommentsRefreshKey((k) => k + 1)}
+            />
           </section>
         </div>
-      </div>
-      <div className="my-[8vh]">
-        <GradualBlur
-          target="page"
-          position="bottom"
-          height="6rem"
-          strength={2}
-          divCount={5}
-          curve="bezier"
-          exponential={true}
-          opacity={1}
-        />
       </div>
     </section>
   );
