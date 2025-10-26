@@ -12,6 +12,8 @@ from logging.handlers import RotatingFileHandler
 def create_app(config_object=Config):
     app = Flask(__name__)
     app.config.from_object(config_object)
+    # Accept routes with and without a trailing slash to avoid 308 redirects (helps with CORS across origins)
+    app.url_map.strict_slashes = False
 
     # --- Logging setup ---
     log_formatter = logging.Formatter(
