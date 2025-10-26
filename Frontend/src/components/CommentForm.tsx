@@ -16,6 +16,8 @@ import {
   FormMessage,
 } from "./ui/form";
 import { CAPTCHA_SITE_KEY } from "../config";
+
+const HAS_CAPTCHA = Boolean(CAPTCHA_SITE_KEY);
 import GlassSurface from "./GlassSurface";
 
 const schema = z.object({
@@ -43,7 +45,9 @@ export default function CommentForm({ projectSlug, onSuccess }: Props) {
     reset,
   } = form;
 
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(
+    HAS_CAPTCHA ? null : "bypass"
+  );
   const [serverError, setServerError] = useState<string | null>(null);
   const [captchaKey, setCaptchaKey] = useState(0);
 
@@ -53,8 +57,9 @@ export default function CommentForm({ projectSlug, onSuccess }: Props) {
 
   const onSubmit = async (values: FormValues) => {
     setServerError(null);
+    const token = captchaToken ?? "bypass";
 
-    if (!captchaToken) {
+    if (HAS_CAPTCHA && !captchaToken) {
       setServerError("Please verify yourself in the CAPTCHA");
       return;
     }
@@ -64,11 +69,11 @@ export default function CommentForm({ projectSlug, onSuccess }: Props) {
         name: values.name,
         email: values.email,
         content: values.content,
-        captchaToken,
+        captchaToken: token,
       });
 
       reset();
-      setCaptchaToken(null);
+      setCaptchaToken(HAS_CAPTCHA ? null : "bypass");
       setCaptchaKey((k) => k + 1);
 
       onSuccess?.();
@@ -137,22 +142,24 @@ export default function CommentForm({ projectSlug, onSuccess }: Props) {
                 )}
               />
 
-              <div className="hidden">
-                <Turnstile
-                  key={captchaKey}
-                  sitekey={CAPTCHA_SITE_KEY}
-                  onVerify={(token) => setCaptchaToken(token)}
-                  onError={() =>
-                    setServerError("CAPTCHA error, please refresh")
-                  }
-                  onExpire={() => setCaptchaToken(null)}
-                />
-                {!captchaToken && (
-                  <p className="text-xs text-muted-foreground">
-                    You must verify CAPTCHA before submitting.
-                  </p>
-                )}
-              </div>
+              {HAS_CAPTCHA && (
+                <div>
+                  <Turnstile
+                    key={captchaKey}
+                    sitekey={CAPTCHA_SITE_KEY}
+                    onVerify={(token) => setCaptchaToken(token)}
+                    onError={() =>
+                      setServerError("CAPTCHA error, please refresh")
+                    }
+                    onExpire={() => setCaptchaToken(null)}
+                  />
+                  {!captchaToken && (
+                    <p className="text-xs text-muted-foreground">
+                      You must verify CAPTCHA before submitting.
+                    </p>
+                  )}
+                </div>
+              )}
 
               {serverError && (
                 <div className="rounded-md bg-red-50 p-3 text-sm text-red-700">
@@ -167,7 +174,9 @@ export default function CommentForm({ projectSlug, onSuccess }: Props) {
 
               <Button
                 type="submit"
-                disabled={!isValid || isSubmitting || !captchaToken}
+                disabled={
+                  !isValid || isSubmitting || (HAS_CAPTCHA && !captchaToken)
+                }
               >
                 {isSubmitting ? "Sending…" : "Submit Comment"}
               </Button>
