@@ -12,6 +12,8 @@
      && apt-get install -y --no-install-recommends \
           build-essential \
           curl \
+          libffi-dev \
+          libssl-dev \
      && rm -rf /var/lib/apt/lists/*
     
     # יצירת משתמש לא-רוט
@@ -22,11 +24,14 @@
     
     # התקנת תלויות: קודם requirements לקאשינג יעיל
     COPY requirements.txt /app/requirements.txt
-    RUN pip install -r requirements.txt || true \
-     && pip install "gunicorn==21.*"
+    RUN pip install --no-cache-dir -r requirements.txt \
+     && pip install --no-cache-dir "gunicorn==21.*"
     
-    # העתקת שאר קוד האפליקציה (כולל app/ ו-wsgi.py)
+    # העתקת שאר קוד האפליקציה (כולל app/, migrations, alembic.ini, scripts)
     COPY . /app
+
+    COPY entrypoint.sh /app/entrypoint.sh
+    RUN chmod +x /app/entrypoint.sh
     
     # הרשאות למשתמש הלא-רוט
     RUN chown -R appuser:appuser /app
@@ -38,6 +43,5 @@
     # HEALTHCHECK: קריאה ל-/health
     HEALTHCHECK --interval=30s --timeout=5s --start-period=20s CMD curl -fsS http://127.0.0.1:8000/health || exit 1
     
-    # הרצת האפליקציה ב-Production דרך Gunicorn
-    # חשוב: נדרש של-wsgi.py יהיה אובייקט app (למשל: app = create_app() או app מוגדר ישירות)
-    CMD ["gunicorn", "wsgi:create_app()", "-b", "0.0.0.0:8000", "--workers", "3", "--timeout", "60"]
+    ENTRYPOINT ["/app/entrypoint.sh"]
+    CMD []
