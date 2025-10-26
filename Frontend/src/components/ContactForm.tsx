@@ -35,9 +35,12 @@ const ContactSchema = z.object({
 type ContactFormValues = z.infer<typeof ContactSchema>;
 
 export default function ContactForm() {
+  const HAS_CAPTCHA = Boolean(CAPTCHA_SITE_KEY);
   const [serverError, setServerError] = useState<string | null>(null);
   const [serverSuccess, setServerSuccess] = useState<string | null>(null);
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(
+    HAS_CAPTCHA ? null : "bypass"
+  );
   const [captchaKey, setCaptchaKey] = useState(0);
   const { darkMode } = useDarkMode();
 
@@ -54,7 +57,7 @@ export default function ContactForm() {
     setServerError(null);
     setServerSuccess(null);
     try {
-      if (!captchaToken) {
+      if (HAS_CAPTCHA && !captchaToken) {
         setServerError("Please verify yourself in the CAPTCHA");
         return;
       }
@@ -62,11 +65,11 @@ export default function ContactForm() {
         name: values.name,
         email: values.email,
         message: values.message,
-        captchaToken,
+        captchaToken: captchaToken ?? undefined,
       });
       setServerSuccess("Thanks! Your message has been sent.");
       reset();
-      setCaptchaToken(null);
+      setCaptchaToken(HAS_CAPTCHA ? null : "bypass");
       setCaptchaKey((k) => k + 1);
     } catch (err: any) {
       setServerError(err?.message || "Something went wrong. Please try again.");
@@ -154,25 +157,29 @@ export default function ContactForm() {
               )}
             />
 
-            <div className="hidden">
-              <Turnstile
-                key={captchaKey}
-                sitekey={CAPTCHA_SITE_KEY}
-                onVerify={(token) => setCaptchaToken(token)}
-                onError={() => setServerError("CAPTCHA error, please refresh")}
-                onExpire={() => setCaptchaToken(null)}
-              />
-              {!captchaToken && (
-                <p className="text-xs text-black/60 dark:text-white/60">
-                  You must verify CAPTCHA before submitting.
-                </p>
-              )}
-            </div>
+            {HAS_CAPTCHA && (
+              <div className="flex flex-col items-start gap-2">
+                <Turnstile
+                  key={captchaKey}
+                  sitekey={CAPTCHA_SITE_KEY}
+                  onVerify={(token) => setCaptchaToken(token)}
+                  onError={() =>
+                    setServerError("CAPTCHA error, please refresh")
+                  }
+                  onExpire={() => setCaptchaToken(null)}
+                />
+                {!captchaToken && (
+                  <p className="text-xs text-black/60 dark:text-white/60">
+                    Please complete the CAPTCHA before submitting.
+                  </p>
+                )}
+              </div>
+            )}
             <div className="flex justify-center">
               <GlassContainer>
                 <Button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || (HAS_CAPTCHA && !captchaToken)}
                   className={`rounded-xl border border-white/20 bg-white/10 backdrop-blur-md px-5 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_8px_24px_rgba(0,0,0,0.2)] transition hover:bg-white/20 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_10px_28px_rgba(0,0,0,0.28)] focus-visible:ring-2 focus-visible:ring-white/40 ${
                     darkMode ? "text-white/90" : "text-black/70"
                   }`}
