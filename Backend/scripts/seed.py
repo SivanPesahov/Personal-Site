@@ -53,7 +53,7 @@ with app.app_context():
         short_description="Task management with Kanban & analytics",
         description_md=(
             "# Taskify\n\n"
-            "Kanban boards, filters, and productivity analytics. Built with React, Node, and MySQL/Mongo (variants)."
+            "Task manager that Includes task creation, categorization, and real-time updates. Built with React, Node + Express, and MongoDB."
         ),
         image_url_desktop="https://res.cloudinary.com/dipx5fuza/image/upload/v1760530336/Screenshot_2025-09-01_at_13.35.41_zdp1jy.png",
         image_url_mobile="https://res.cloudinary.com/dipx5fuza/image/upload/v1761127784/Screenshot_2025-10-22_at_13.09.11_wkwiju.png",
@@ -77,7 +77,7 @@ with app.app_context():
         short_description="Product landing page with clean UX & SEO",
         description_md=(
             "# Relyon Landing\n\n"
-            "Marketing landing with responsive layout, SEO meta, and contact form integration."
+            "Marketing landing with responsive layout, SEO meta, and mobile-first design. Built with Next.js."
         ),
         image_url_desktop="https://res.cloudinary.com/dipx5fuza/image/upload/v1760530336/Screenshot_2025-08-25_at_16.46.12_yi6jf5.png",
         image_url_mobile="https://res.cloudinary.com/dipx5fuza/image/upload/v1760530336/Screenshot_2025-08-25_at_16.46.12_yi6jf5.png",
@@ -102,11 +102,15 @@ with app.app_context():
             "get AI insights, and optimize job search strategies.\n\n"
             "Built with React, Node.js, TypeScript, Express, MongoDB, and ShadCN UI."
         ),
-        image_url_desktop="https://res.cloudinary.com/dipx5fuza/image/upload/v1760530336/Screenshot_2025-08-25_at_16.46.12_yi6jf5.png",
-        image_url_mobile="https://res.cloudinary.com/dipx5fuza/image/upload/v1760530336/Screenshot_2025-08-25_at_16.46.12_yi6jf5.png",
+        image_url_desktop="https://res.cloudinary.com/dipx5fuza/image/upload/v1761481848/Screenshot_2025-10-26_at_14.30.42_ffraku.png",
+        image_url_mobile="https://res.cloudinary.com/dipx5fuza/image/upload/v1761481899/Screenshot_2025-10-26_at_14.31.35_xjccem.png",
         repo_url="https://github.com/SivanPesahov/Job-Flow",
         live_url="",
-        images_json=json.dumps([]),
+        images_json=json.dumps(
+            [
+                "https://res.cloudinary.com/dipx5fuza/image/upload/v1761481848/Screenshot_2025-10-26_at_14.30.42_ffraku.png"
+            ]
+        ),
     )
 
     db.session.commit()
