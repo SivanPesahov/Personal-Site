@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from .extensions import db, ma, limiter, mail, cors
 from .config import Config
 from .health.routes import bp as health_bp
@@ -98,5 +98,19 @@ def create_app(config_object=Config):
     app.register_blueprint(health_bp, url_prefix="/")
     app.register_blueprint(projects_bp, url_prefix="/api/projects")
     app.register_blueprint(contact_bp, url_prefix="/api/contact")
+
+    @app.after_request
+    def add_cors_headers(response):
+        origin = request.headers.get("Origin")
+        allowed_origins = [
+            "https://personal-site-alpha-rosy.vercel.app",
+            "https://www.sivan.dev",
+            "http://localhost:5173",
+        ]
+        if origin in allowed_origins:
+            response.headers["Access-Control-Allow-Origin"] = origin
+            response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+            response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
 
     return app
