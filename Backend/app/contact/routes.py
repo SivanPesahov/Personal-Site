@@ -123,7 +123,7 @@ def create_contact_message():
     try:
         prev_to = socket.getdefaulttimeout()
         socket.setdefaulttimeout(5)
-        current_app.logger.info("[contact] sending email via SMTP…")
+        current_app.logger.info("[contact] sending email via provider=brevo…")
         send_contact_email(name=name_clean, email=email.strip(), message=message_clean)
         current_app.logger.info("[contact] email sent")
     except Exception as e:
