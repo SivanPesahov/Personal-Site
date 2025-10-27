@@ -82,13 +82,13 @@ export default function ContactForm() {
         <Form {...form}>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="h-full space-y-[4vh] flex flex-col w-full "
+            className="h-full flex flex-col w-full "
           >
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem className="w-[100%]">
+                <FormItem className="w-[100%] my-2">
                   <FormLabel className="text-sm font-medium text-black/70 dark:text-white/80">
                     Name
                   </FormLabel>
@@ -112,7 +112,7 @@ export default function ContactForm() {
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem className="w-[100%]">
+                <FormItem className="w-[100%] my-2">
                   <FormLabel className="text-sm font-medium text-black/70 dark:text-white/80">
                     Email
                   </FormLabel>
@@ -137,7 +137,7 @@ export default function ContactForm() {
               control={form.control}
               name="message"
               render={({ field }) => (
-                <FormItem className="w-[100%]">
+                <FormItem className="w-[100%] my-2">
                   <FormLabel className="text-sm font-medium text-black/70 dark:text-white/80">
                     Message
                   </FormLabel>
