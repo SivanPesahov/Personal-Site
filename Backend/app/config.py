@@ -60,6 +60,9 @@ class Config:
     HCAPTCHA_SECRET = os.getenv("HCAPTCHA_SECRET")
     CAPTCHA_BYPASS = os.getenv("CAPTCHA_BYPASS", "false").lower() == "true"
 
+    # Brevo (Sendinblue) API
+    BREVO_API_KEY = os.getenv("BREVO_API_KEY")
+
 
 class DevConfig(Config):
     DEBUG = True
