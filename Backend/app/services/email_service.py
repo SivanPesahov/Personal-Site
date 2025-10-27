@@ -1,16 +1,13 @@
 from __future__ import annotations
-
 from flask import current_app
 from markupsafe import escape
-from flask_mail import Message
+import requests
 
-# We use the global Flask-Mail instance configured in the app
-# (created in app/extensions.py and initialized in app/__init__.py)
-from app.extensions import mail
+BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email"
 
 
 def _render_text(name: str, email: str, message: str) -> str:
-    return f"New contact message from {name} &lt;{email}&gt;\n\n" f"{message}\n"
+    return f"New contact message from {name} <{email}>\n\n{message}\n"
 
 
 def _render_html(name: str, email: str, message: str) -> str:
@@ -26,38 +23,37 @@ def _render_html(name: str, email: str, message: str) -> str:
 
 
 def send_contact_email(*, name: str, email: str, message: str) -> None:
-    """
-    Send contact email using Flask‑Mail (SMTP).
-    SMTP settings are taken from the app config:
-
-      MAIL_SERVER=smtp-relay.brevo.com
-      MAIL_PORT=587
-      MAIL_USE_TLS=True
-      MAIL_USE_SSL=False
-      MAIL_USERNAME=&lt;your Brevo SMTP login&gt;
-      MAIL_PASSWORD=&lt;your Brevo SMTP key/password&gt;
-      MAIL_DEFAULT_SENDER=&lt;verified sender email in Brevo&gt;
-      MAIL_TO=&lt;destination address&gt;
-      MAIL_SUBJECT_PREFIX=[Portfolio Contact] (optional)
-    """
+    """Send contact email using Brevo (Sendinblue) REST API."""
+    api_key = current_app.config.get("BREVO_API_KEY")
     sender = current_app.config.get("MAIL_DEFAULT_SENDER")
     to_email = current_app.config.get("MAIL_TO")
     subject_prefix = current_app.config.get("MAIL_SUBJECT_PREFIX", "[Contact]")
 
+    if not api_key:
+        raise RuntimeError("BREVO_API_KEY is not configured")
     if not sender or not to_email:
         raise RuntimeError("MAIL_DEFAULT_SENDER / MAIL_TO are not configured")
 
-    subject = f"{subject_prefix} New message from {name}"
+    payload = {
+        "sender": {"email": sender},
+        "to": [{"email": to_email}],
+        "subject": f"{subject_prefix} New message from {name}",
+        "textContent": _render_text(name, email, message),
+        "htmlContent": _render_html(name, email, message),
+        "headers": {"X-Source-App": "personal-site"},
+    }
 
-    msg = Message(
-        subject=subject,
-        sender=sender,
-        recipients=[to_email],
-    )
-    msg.body = _render_text(name, email, message)
-    msg.html = _render_html(name, email, message)
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json",
+        "api-key": api_key,
+    }
 
-    current_app.logger.info("[email] Sending via SMTP (Flask‑Mail)…")
-    # Flask‑Mail handles connection/retry based on app config
-    mail.send(msg)
-    current_app.logger.info("[email] SMTP send OK")
+    current_app.logger.info("[email] Sending via Brevo API...")
+    resp = requests.post(BREVO_ENDPOINT, json=payload, headers=headers, timeout=10)
+    if resp.status_code >= 400:
+        current_app.logger.error(
+            "[email] Brevo error %s: %s", resp.status_code, resp.text[:500]
+        )
+        resp.raise_for_status()
+    current_app.logger.info("[email] Brevo send OK")
