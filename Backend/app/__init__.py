@@ -111,7 +111,7 @@ def create_app(config_object=Config):
             "https://personal-site-alpha-rosy.vercel.app",
             "https://www.sivan.dev",
             "http://localhost:5173",
-            "https://sivan-pesahov.dev",
+            "https://www.sivan-pesahov.dev",
         ]
         if origin in allowed_origins:
             response.headers["Access-Control-Allow-Origin"] = origin
