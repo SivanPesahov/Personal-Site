@@ -99,6 +99,11 @@ def create_app(config_object=Config):
     app.register_blueprint(projects_bp, url_prefix="/api/projects")
     app.register_blueprint(contact_bp, url_prefix="/api/contact")
 
+    # --- Root route to avoid 404/NOT_FOUND on custom domains ---
+    @app.route("/", methods=["GET"])
+    def root():
+        return {"status": "ok", "message": "API root"}, 200
+
     @app.after_request
     def add_cors_headers(response):
         origin = request.headers.get("Origin")
