@@ -13,29 +13,31 @@ function AboutPage() {
             </h1>
 
             <p className="mb-4 text-neutral-700 dark:text-neutral-200">
-              Hi! I'm Sivan Pesahov, a Full-Stack Developer with a strong focus
-              on Frontend and real-time systems. I build scalable end-to-end
-              applications with <strong>React/Next.js</strong>, backend services
-              in <strong>Node.js</strong> or <strong>Python/Flask</strong>, work
-              with <strong>REST APIs</strong>, and relational/NoSQL databases.
-              I'm a graduate of the “Warriors to High-Tech” program with an
-              internship at Relyon, bringing precise execution under pressure,
-              smart prioritization, and attention to detail.
+              <strong>Full Stack Developer</strong> with a strong foundation in
+              building scalable, user-centric web applications. I come from a
+              background as a<strong> combat soldier</strong> in a{" "}
+              <strong>special operations unit</strong>, where I gained
+              discipline, resilience, and the ability to perform under pressure
+              - qualities that continue to shape the way I approach engineering
+              challenges.
             </p>
 
             <p className="mb-4 text-neutral-700 dark:text-neutral-200">
-              Before transitioning into tech, I served as a combat soldier and
-              team leader in a classified operational unit within the IDF’s
-              Intelligence Directorate. That experience shaped my discipline,
-              problem-solving mindset, and ability to perform under pressure —
-              qualities I now bring into software development.
+              After completing the intensive{" "}
+              <strong>“Warriors to High‑Tech”</strong> program and a hands‑on
+              full stack internship at <strong>Relyon.ai</strong>, I
+              transitioned into the industry and now work as a{" "}
+              <strong>JavaScript Developer at Konimbo</strong>, developing
+              production‑grade features for high‑traffic e‑commerce platforms.
             </p>
 
             <p className="mb-6 text-neutral-700 dark:text-neutral-200">
-              I value clean code, thoughtful manual checks, automation, and
-              high-performance, accessible UX. I’m open to the next challenge in
-              a strong team—places where I can learn fast, take ownership, and
-              ship features end-to-end.
+              My daily work spans <strong>React</strong>,{" "}
+              <strong>Next.js</strong>,<strong>Node.js</strong>,{" "}
+              <strong>TypeScript</strong>, <strong>MongoDB</strong>,
+              <strong>MySQL</strong> and modern development practices. I enjoy
+              solving complex problems, optimizing user experience, and building
+              clean, maintainable systems at scale.
             </p>
 
             <div className="border-t border-neutral-200/60 dark:border-neutral-800/60 my-6" />
