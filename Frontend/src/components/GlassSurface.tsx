@@ -192,13 +192,6 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
   }, [width, height]);
 
   const supportsSVGFilters = () => {
-    const isWebkit = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
-    const isFirefox = /Firefox/.test(navigator.userAgent);
-
-    if (isWebkit || isFirefox) {
-      return false;
-    }
-
     const div = document.createElement('div');
     div.style.backdropFilter = `url(#${filterId})`;
     return div.style.backdropFilter !== '';
@@ -358,6 +351,16 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
           </filter>
         </defs>
       </svg>
+
+      {/* Backdrop layer with filter for Safari */}
+      <div 
+        className="absolute inset-0 rounded-[inherit] pointer-events-none"
+        style={{
+          backdropFilter: supportsSVGFilters() ? 'none' : `blur(${blur}px) saturate(${saturation})`,
+          WebkitBackdropFilter: supportsSVGFilters() ? 'none' : `blur(${blur}px) saturate(${saturation})`,
+          filter: `url(#${filterId})`,
+        }}
+      />
 
       <div className="w-full h-full flex items-center justify-center p-2 rounded-[inherit] relative z-10">
         {children}
