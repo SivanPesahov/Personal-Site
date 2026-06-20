@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Color Options Preview</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #111; padding: 32px; display: flex; flex-direction: column; gap: 32px; }
+    h1 { color: #fff; text-align: center; font-size: 18px; margin-bottom: 8px; opacity: 0.6; letter-spacing: 2px; text-transform: uppercase; }
+    .section-label { color: #fff; opacity: 0.35; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; text-align: center; }
+    .options { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .card { border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+    .label { padding: 10px 20px; background: rgba(255,255,255,0.05); color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .preview { padding: 36px 32px; display: flex; flex-direction: column; gap: 18px; min-height: 280px; }
+    .tag { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.6; }
+    .title { font-size: 30px; font-weight: 900; line-height: 1.1; color: #fff; }
+    .desc { font-size: 12px; line-height: 1.6; opacity: 0.6; color: #e0e0e0; max-width: 300px; }
+    .buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn { padding: 9px 20px; border-radius: 8px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border: 1.5px solid; }
+    .swatches { display: flex; gap: 8px; margin-top: 4px; }
+    .swatch { width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); }
+    .navbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-radius: 999px; margin-bottom: 8px; font-size: 12px; font-weight: 600; color: #fff; }
+    .nav-links { display: flex; gap: 16px; opacity: 0.75; }
+
+    /* E — Midnight Slate (Linear/Vercel style) */
+    .e .preview { background: #0c111d; }
+    .e .tag { color: #6366f1; }
+    .e .navbar { background: rgba(255,255,255,0.04); border: 1px solid rgba(99,102,241,0.25); }
+    .e .btn-1 { border-color: #6366f1; color: #6366f1; box-shadow: 0 0 10px rgba(99,102,241,0.3); }
+    .e .btn-2 { border-color: #22d3ee; color: #22d3ee; box-shadow: 0 0 10px rgba(34,211,238,0.3); }
+
+    /* F — Warm Amber */
+    .f .preview { background: #100c00; }
+    .f .tag { color: #f59e0b; }
+    .f .navbar { background: rgba(255,255,255,0.04); border: 1px solid rgba(245,158,11,0.25); }
+    .f .btn-1 { border-color: #f59e0b; color: #f59e0b; box-shadow: 0 0 10px rgba(245,158,11,0.3); }
+    .f .btn-2 { border-color: #ef4444; color: #ef4444; box-shadow: 0 0 10px rgba(239,68,68,0.3); }
+
+    /* G — Slate Blue (clean dev) */
+    .g .preview { background: #020817; }
+    .g .tag { color: #3b82f6; }
+    .g .navbar { background: rgba(255,255,255,0.04); border: 1px solid rgba(59,130,246,0.2); }
+    .g .btn-1 { border-color: #3b82f6; color: #3b82f6; box-shadow: 0 0 10px rgba(59,130,246,0.3); }
+    .g .btn-2 { border-color: #8b5cf6; color: #8b5cf6; box-shadow: 0 0 10px rgba(139,92,246,0.3); }
+
+    /* H — Cyberpunk Rose */
+    .h .preview { background: #0a0010; }
+    .h .tag { color: #f43f5e; }
+    .h .navbar { background: rgba(255,255,255,0.04); border: 1px solid rgba(244,63,94,0.25); }
+    .h .btn-1 { border-color: #f43f5e; color: #f43f5e; box-shadow: 0 0 10px rgba(244,63,94,0.35); }
+    .h .btn-2 { border-color: #a855f7; color: #a855f7; box-shadow: 0 0 10px rgba(168,85,247,0.3); }
+  </style>
+</head>
+<body>
+  <h1>Color Palette Options — New Batch</h1>
+  <div class="options">
+
+    <!-- E -->
+    <div class="card e">
+      <div class="label">E — Midnight Slate (Linear / Vercel)</div>
+      <div class="preview">
+        <div class="navbar"><span>Sivan Pesahov</span><div class="nav-links"><span>Home</span><span>Projects</span><span>About</span></div></div>
+        <div class="tag">HI, I'M SIVAN</div>
+        <div class="title">I'M A FULL-STACK<br/>DEVELOPER</div>
+        <div class="desc">I design and build modern, high-performance web applications using React and Node.js.</div>
+        <div class="buttons">
+          <div class="btn btn-1">View Projects</div>
+          <div class="btn btn-2">LinkedIn</div>
+        </div>
+        <div class="swatches">
+          <div class="swatch" style="background:#0c111d;border-color:#555"></div>
+          <div class="swatch" style="background:#6366f1"></div>
+          <div class="swatch" style="background:#22d3ee"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F -->
+    <div class="card f">
+      <div class="label">F — Warm Amber / Gold</div>
+      <div class="preview">
+        <div class="navbar"><span>Sivan Pesahov</span><div class="nav-links"><span>Home</span><span>Projects</span><span>About</span></div></div>
+        <div class="tag">HI, I'M SIVAN</div>
+        <div class="title">I'M A FULL-STACK<br/>DEVELOPER</div>
+        <div class="desc">I design and build modern, high-performance web applications using React and Node.js.</div>
+        <div class="buttons">
+          <div class="btn btn-1">View Projects</div>
+          <div class="btn btn-2">LinkedIn</div>
+        </div>
+        <div class="swatches">
+          <div class="swatch" style="background:#100c00;border-color:#555"></div>
+          <div class="swatch" style="background:#f59e0b"></div>
+          <div class="swatch" style="background:#ef4444"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- G -->
+    <div class="card g">
+      <div class="label">G — Deep Slate Blue (clean dev)</div>
+      <div class="preview">
+        <div class="navbar"><span>Sivan Pesahov</span><div class="nav-links"><span>Home</span><span>Projects</span><span>About</span></div></div>
+        <div class="tag">HI, I'M SIVAN</div>
+        <div class="title">I'M A FULL-STACK<br/>DEVELOPER</div>
+        <div class="desc">I design and build modern, high-performance web applications using React and Node.js.</div>
+        <div class="buttons">
+          <div class="btn btn-1">View Projects</div>
+          <div class="btn btn-2">LinkedIn</div>
+        </div>
+        <div class="swatches">
+          <div class="swatch" style="background:#020817;border-color:#555"></div>
+          <div class="swatch" style="background:#3b82f6"></div>
+          <div class="swatch" style="background:#8b5cf6"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H -->
+    <div class="card h">
+      <div class="label">H — Cyberpunk Rose</div>
+      <div class="preview">
+        <div class="navbar"><span>Sivan Pesahov</span><div class="nav-links"><span>Home</span><span>Projects</span><span>About</span></div></div>
+        <div class="tag">HI, I'M SIVAN</div>
+        <div class="title">I'M A FULL-STACK<br/>DEVELOPER</div>
+        <div class="desc">I design and build modern, high-performance web applications using React and Node.js.</div>
+        <div class="buttons">
+          <div class="btn btn-1">View Projects</div>
+          <div class="btn btn-2">LinkedIn</div>
+        </div>
+        <div class="swatches">
+          <div class="swatch" style="background:#0a0010;border-color:#555"></div>
+          <div class="swatch" style="background:#f43f5e"></div>
+          <div class="swatch" style="background:#a855f7"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

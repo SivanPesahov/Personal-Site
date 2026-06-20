@@ -80,7 +80,7 @@ function AboutPage() {
               <GlassSurface width={"auto"} height={"auto"} borderRadius={12}>
                 <a
                   href="/CV-Sivan-Pesahov.pdf"
-                  download
+                  download="CV-Sivan-Pesahov.pdf"
                   className="inline-flex items-center px-4 py-2 rounded-md font-semibold hover:opacity-90 transition"
                 >
                   Download CV

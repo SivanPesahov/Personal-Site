@@ -1,5 +1,4 @@
 import api from "../services/api.service";
-import { useLocalStorage } from "@uidotdev/usehooks";
 import React, { createContext, useState, useEffect, useContext } from "react";
 import type { User } from "../types/userType";
 
@@ -20,7 +19,18 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loggedInUser, setLoggedInUser] =
     useState<loggedInUserStateType>(undefined);
-  const [token, setToken] = useLocalStorage("token", null);
+  const [token, setTokenState] = useState<string | null>(
+    () => localStorage.getItem("token")
+  );
+
+  function setToken(value: string | null) {
+    if (value === null) {
+      localStorage.removeItem("token");
+    } else {
+      localStorage.setItem("token", value);
+    }
+    setTokenState(value);
+  }
 
   useEffect(() => {
     if (!token) {

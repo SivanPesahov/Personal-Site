@@ -2,3 +2,5 @@
 # Backend secrets & logs
 Backend/.env
 Backend/*.log
+.gstack/
+.playwright-mcp/
