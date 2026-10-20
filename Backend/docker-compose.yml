@@ -2,26 +2,16 @@ version: "3.9"
 
 services:
   db:
-    image: mysql:8.4
-    command:
-      [
-        "mysqld",
-        "--character-set-server=utf8mb4",
-        "--collation-server=utf8mb4_unicode_ci",
-      ]
+    image: postgres:16-alpine
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-pesahov2258}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-personal_site}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pesahov2258}
+      POSTGRES_DB: ${POSTGRES_DB:-personal_site}
     ports:
-      - "3307:3306" # כדי שלא יתנגש עם MySQL המקומי שלך
+      - "5433:5432" # כדי שלא יתנגש עם Postgres המקומי שלך
     volumes:
-      - mysql_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD",
-        ]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -33,7 +23,7 @@ services:
       dockerfile: Dockerfile
     env_file: .env
     environment:
-      DATABASE_URL: mysql+pymysql://root:${MYSQL_ROOT_PASSWORD:-pesahov2258}@db:3306/${MYSQL_DATABASE:-personal_site}?charset=utf8mb4
+      DATABASE_URL: postgresql+psycopg://postgres:${POSTGRES_PASSWORD:-pesahov2258}@db:5432/${POSTGRES_DB:-personal_site}
       FLASK_ENV: production
     ports:
       - "8000:8000"
@@ -42,4 +32,4 @@ services:
         condition: service_healthy
 
 volumes:
-  mysql_data:
+  postgres_data:

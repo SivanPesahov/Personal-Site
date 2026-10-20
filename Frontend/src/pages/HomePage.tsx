@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { listProjects } from "../services/projects.service";
+import { useEffect } from "react";
 
 const SKILLS_A = ["React", "Next.js", "TypeScript", "Node.js", "Express", "REST APIs", "Tailwind", "Vite", "Prisma", "MySQL", "MongoDB", "Redis"];
 const SKILLS_B = ["Python", "Flask", "AWS", "AI Tools", "SQLAlchemy", "Alembic", "RabbitMQ", "JWT / NextAuth", "Docker", "Vercel", "Git", "Figma", "shadcn/ui", "Stripe"];
@@ -70,7 +69,7 @@ const PROJECT_META: ProjectMeta[] = [
     badge: "Dashboard · JS",
     tags: ["JavaScript", "Charts", "API"],
     delay: "d1",
-    fallbackTitle: "market‑tracker",
+    fallbackTitle: "Market Tracker",
     fallbackDesc: "Watchlist + portfolio dashboard: tickers, deltas, history charts.",
     fallbackImage: "https://res.cloudinary.com/dipx5fuza/image/upload/v1781976218/8b366e02-1650-4dcc-a1b8-ca2a305001d2.png",
     fallbackHref: "https://github.com/SivanPesahov/market-tracker",
@@ -118,45 +117,10 @@ const FALLBACK_PROJECTS: ProjectCard[] = PROJECT_META.map((m) => ({
   title: m.fallbackTitle, desc: m.fallbackDesc, image: m.fallbackImage, href: m.fallbackHref,
 }));
 
-function useProjects(): ProjectCard[] {
-  const [projects, setProjects] = useState<ProjectCard[]>(FALLBACK_PROJECTS);
-
-  useEffect(() => {
-    let cancelled = false;
-    listProjects()
-      .then(({ items }) => {
-        if (cancelled || !items?.length) return;
-        const bySlug = new Map(items.map((p) => [p.slug, p]));
-        setProjects(
-          PROJECT_META.map((m) => {
-            const db = bySlug.get(m.slug);
-            if (!db) {
-              return {
-                slug: m.slug, cls: m.cls, c1: m.c1, c2: m.c2, badge: m.badge, tags: m.tags, delay: m.delay,
-                title: m.fallbackTitle, desc: m.fallbackDesc, image: m.fallbackImage, href: m.fallbackHref,
-              };
-            }
-            return {
-              slug: m.slug, cls: m.cls, c1: m.c1, c2: m.c2, badge: m.badge, tags: m.tags, delay: m.delay,
-              title: db.title || m.fallbackTitle,
-              desc: db.short_description || m.fallbackDesc,
-              image: db.image_url_desktop || db.image_url || m.fallbackImage,
-              href: db.live_url || db.repo_url || m.fallbackHref,
-            };
-          })
-        );
-      })
-      .catch(() => {
-        // Keep the static fallback content — never break the page if the API is down.
-      });
-    return () => { cancelled = true; };
-  }, []);
-
-  return projects;
-}
-
 function HomePage() {
-  const projects = useProjects();
+  // No server/DB — this content is the static source of truth (see the
+  // comment on PROJECT_META above and src/data/projects.ts for project pages).
+  const projects = FALLBACK_PROJECTS;
 
   // Reveal on scroll
   useEffect(() => {

@@ -1,83 +1,28 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
-import CommentForm from "../components/CommentForm";
-import {
-  getProjectBySlug,
-  getProjectComments,
-  type Project,
-  type Comment,
-} from "../services/projects.service";
+import { PROJECTS, PROJECT_COMMENTS } from "../data/projects";
 import GlassSurface from "../components/GlassSurface";
 
 import CommentComponent from "../components/CommentComponent";
 import ProjectPicsCarusel from "../components/ProjectPicsCarusel";
 import Typing from "../components/Typing";
 
+// Fully static page: content comes from the frozen snapshot in
+// ../data/projects.ts (no server/DB — see that file's header comment).
 function ProjectPage() {
   const { slug = "" } = useParams();
-  const [project, setProject] = useState<Project | null>(null);
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [loadingComments, setLoadingComments] = useState(false);
-  const [commentsRefreshKey, setCommentsRefreshKey] = useState(0);
+  const project = PROJECTS[slug];
+  const comments = PROJECT_COMMENTS[slug] ?? [];
 
-  useEffect(() => {
-    let cancelled = false;
-    async function load() {
-      setLoading(true);
-      setError(null);
-      try {
-        const p = await getProjectBySlug(slug);
-        if (!cancelled) setProject(p);
-      } catch (e: any) {
-        if (!cancelled) setError(e?.message || "Failed to load project");
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-    if (slug) load();
-    return () => {
-      cancelled = true;
-    };
-  }, [slug]);
-
-  useEffect(() => {
-    let cancelled = false;
-    async function loadComments() {
-      setLoadingComments(true);
-      try {
-        const list = await getProjectComments(slug);
-        if (!cancelled) setComments(list);
-      } catch (_) {
-      } finally {
-        if (!cancelled) setLoadingComments(false);
-      }
-    }
-    if (slug) loadComments();
-    return () => {
-      cancelled = true;
-    };
-  }, [slug, commentsRefreshKey]);
-
-  if (loading) return <div className="p-4">Loading…</div>;
-  if (error)
+  if (!project) {
     return (
-      <div className="p-4 text-red-600 dark:text-red-400">Error: {error}</div>
+      <div className="p-4">
+        Project not found. <Link to="/">Back home</Link>
+      </div>
     );
-  if (!project) return <div className="p-4">Project not found.</div>;
-  const imageList: string[] = Array.isArray(project.images_json)
-    ? (project.images_json as unknown as string[])
-    : (() => {
-        try {
-          return project.images_json
-            ? JSON.parse(String(project.images_json))
-            : [];
-        } catch {
-          return [];
-        }
-      })();
+  }
+
+  const imageList = project.images;
 
   return (
     <section className="relative  overflow-hidden pt-[2vh]">
@@ -147,32 +92,24 @@ function ProjectPage() {
             </GlassSurface>
           </section>
 
-          <section className="mt-8">
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-              Comments
-            </h2>
-            {loadingComments && <p>Loading comments…</p>}
-            {!loadingComments && comments.length === 0 && (
-              <p>No comments yet.</p>
-            )}
-            <ul className="list-none p-0 m-0">
-              {comments.map((c) => (
-                <li key={c.id} className="my-2">
-                  <CommentComponent
-                    name={c.name}
-                    created_at={c.created_at}
-                    content={c.content}
-                  />
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section className="mt-4">
-            <CommentForm
-              projectSlug={slug}
-              onSuccess={() => setCommentsRefreshKey((k) => k + 1)}
-            />
-          </section>
+          {comments.length > 0 && (
+            <section className="mt-8">
+              <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                Comments
+              </h2>
+              <ul className="list-none p-0 m-0">
+                {comments.map((c) => (
+                  <li key={c.id} className="my-2">
+                    <CommentComponent
+                      name={c.name}
+                      created_at={c.created_at}
+                      content={c.content}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
         </div>
       </div>
     </section>

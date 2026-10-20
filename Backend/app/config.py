@@ -34,8 +34,8 @@ class Config:
     # אחסון מגבלות (לזיכרון מקומי; נשתמש ב־Redis בפרודקשן)
     RATELIMIT_STORAGE_URI = os.getenv("RATELIMIT_STORAGE_URI", "memory://")
 
-    # חיבור ל-MySQL (נשתמש בהמשך עם SQLAlchemy)
-    # פורמט: mysql+pymysql://USER:PASSWORD@HOST:3306/DBNAME?charset=utf8mb4
+    # חיבור ל-Postgres (נשתמש עם SQLAlchemy)
+    # פורמט: postgresql+psycopg://USER:PASSWORD@HOST:5432/DBNAME
     DATABASE_URL = os.getenv("DATABASE_URL", "")
 
     # SQLAlchemy configuration
